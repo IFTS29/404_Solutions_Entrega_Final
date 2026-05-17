@@ -1,0 +1,25 @@
+extends ../layout
+
+block contenido
+  .login-container
+    .login-header
+      h1 TodoStock S.A.
+      p Iniciar Sesión
+    
+    if error
+      .error-msg= error
+
+    form(action="/login", method="POST")
+      div
+        label(for="username") Usuario:
+        input(type="text", id="username", name="username", value=datos && datos.username ? datos.username : '', required)
+      
+      div
+        label(for="password") Contraseña:
+        input(type="password", id="password", name="password", required)
+      
+      button(type="submit") Iniciar Sesión
+    
+    .register-link
+      p ¿No tienes cuenta? 
+        a(href="/register") Regístrate aquí

@@ -1,33 +1,55 @@
-const express = require("express");
-const app = express();
-const path = require("path");
-const connectDB = require("./config/database");
+const express = require('express');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const path = require('path');
 require('dotenv').config();
 
-const homeRoutes = require("./routes/homeRoutes");
-const rutasProductos = require("./routes/productoRoutes");
-const clienteRoutes = require("./routes/clienteRoutes");
-const proveedorRoutes = require("./routes/proveedorRoutes");
-const finanzasRoutes = require("./routes/finanzasRoutes");
+const app = express();
 
-// Conectar a MongoDB
-connectDB();
+// Configuración de sesión
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'mi_secreto_super_seguro',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    ttl: 24 * 60 * 60
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
+  }
+}));
 
-// Configuración de Pug y estaticos
-app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "views"));
+// Middleware para pasar el usuario a todas las vistas
+app.use((req, res, next) => {
+  res.locals.usuario = req.session.usuario || null;
+  next();
+});
+
+// Configuración de vistas
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 // Middlewares
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Uso de las rutas
-app.use("/", homeRoutes);
-app.use("/productos", rutasProductos);
-app.use("/clientes", clienteRoutes);
-app.use("/proveedores", proveedorRoutes);
-app.use("/finanzas", finanzasRoutes);
+// Conexión a MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('MongoDB conectado correctamente'))
+  .catch(err => console.error('Error conectando a MongoDB:', err));
+
+// Rutas
+app.use('/', require('./routes/homeRoutes'));
+app.use('/', require('./routes/authRoutes'));  // Las rutas de auth
+app.use('/productos', require('./routes/productoRoutes'));
+app.use('/clientes', require('./routes/clienteRoutes'));
+app.use('/proveedores', require('./routes/proveedorRoutes'));
+app.use('/finanzas', require('./routes/finanzasRoutes'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

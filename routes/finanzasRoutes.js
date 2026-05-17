@@ -1,8 +1,8 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const finanzasController = require("../controllers/finanzasController");
+const finanzasController = require('../controllers/finanzasController');
+const { isAuthenticated } = require('../controllers/authController');
 
-// Ruta principal: resumen financiero
-router.get("/", finanzasController.resumen);
+router.get("/", isAuthenticated, finanzasController.resumen);
 
 module.exports = router;

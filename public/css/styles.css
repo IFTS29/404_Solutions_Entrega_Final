@@ -43,6 +43,7 @@ nav ul li a:hover {
 main {
     max-width: 900px;
     margin: 0 auto;
+    margin-top: 30px;
     padding: 20px;
     background: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -311,3 +312,64 @@ form div a {
     gap: 15px;
 }
 
+
+/* Estilos para login y register */
+.login-container,
+.register-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.register-container {
+    max-width: 500px;
+}
+
+.login-header,
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1,
+.register-header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.login-header p,
+.register-header p {
+    color: #7f8c8d;
+}
+
+.register-link,
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-link a,
+.login-link a {
+    color: #18bc9c;
+    text-decoration: none;
+}
+
+.register-link a:hover,
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Ajustes para los formularios de login/register */
+.login-container form,
+.register-container form {
+    max-width: 100%;
+}
+
+.login-container button,
+.register-container button {
+    width: 100%;
+    margin-top: 10px;
+}
