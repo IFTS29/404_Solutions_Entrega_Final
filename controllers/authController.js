@@ -1,28 +1,18 @@
 const Usuario = require("../models/Usuario");
 
+// Variable global para almacenar el usuario actual (solo en memoria)
+let usuarioActual = null;
+
 // ============ MIDDLEWES DE AUTENTICACIÓN ============
 const isAuthenticated = (req, res, next) => {
-  if (req.session && req.session.usuario) {
+  if (usuarioActual) {
     return next();
   }
   res.redirect("/login");
 };
 
-const isAdmin = (req, res, next) => {
-  if (
-    req.session &&
-    req.session.usuario &&
-    req.session.usuario.rol === "admin"
-  ) {
-    return next();
-  }
-  res
-    .status(403)
-    .send("Acceso denegado. Se requieren permisos de administrador.");
-};
-
 const isGuest = (req, res, next) => {
-  if (req.session && req.session.usuario) {
+  if (usuarioActual) {
     return res.redirect("/");
   }
   next();
@@ -41,36 +31,35 @@ const authController = {
 
   login: async (req, res) => {
     try {
-      const { username, password } = req.body;
+      const { email, password } = req.body;
 
-      const usuario = await Usuario.findOne({ username });
+      // Buscar usuario por email
+      const usuario = await Usuario.findOne({ email });
+
       if (!usuario) {
         return res.render("auth/login", {
           titulo: "Login - TodoStock S.A.",
-          error: "Usuario o contraseña incorrectos",
-          datos: { username },
+          error: "Email o contraseña incorrectos",
+          datos: { email },
         });
       }
 
-      const isValid = await usuario.comparePassword(password);
-      if (!isValid) {
+      // Comparación directa (sin encriptación)
+      if (usuario.password !== password) {
         return res.render("auth/login", {
           titulo: "Login - TodoStock S.A.",
-          error: "Usuario o contraseña incorrectos",
-          datos: { username },
+          error: "Email o contraseña incorrectos",
+          datos: { email },
         });
       }
 
-      // Guardar sesión
-      req.session.usuario = {
+      // Guardar usuario actual en variable global
+      usuarioActual = {
         id: usuario._id,
         username: usuario.username,
         nombre: usuario.nombre,
-        rol: usuario.rol,
+        email: usuario.email,
       };
-
-      // Debug: Verificar que se guardó
-      console.log("Usuario guardado en sesión:", req.session.usuario);
 
       res.redirect("/");
     } catch (error) {
@@ -92,11 +81,11 @@ const authController = {
     });
   },
 
-  // Procesar registro
   register: async (req, res) => {
     try {
       const { username, password, confirmPassword, nombre, email } = req.body;
 
+      // Validar que las contraseñas coincidan
       if (password !== confirmPassword) {
         return res.render("auth/register", {
           titulo: "Registro - TodoStock S.A.",
@@ -105,8 +94,19 @@ const authController = {
         });
       }
 
-      const existeUsuario = await Usuario.findOne({ username });
-      if (existeUsuario) {
+      // Verificar si el email ya está registrado
+      const existeEmail = await Usuario.findOne({ email });
+      if (existeEmail) {
+        return res.render("auth/register", {
+          titulo: "Registro - TodoStock S.A.",
+          error: "El email ya está registrado",
+          datos: { username, nombre, email },
+        });
+      }
+
+      // Verificar si el username ya existe (CORREGIDO)
+      const existeUsername = await Usuario.findOne({ username });
+      if (existeUsername) {
         return res.render("auth/register", {
           titulo: "Registro - TodoStock S.A.",
           error: "El nombre de usuario ya está en uso",
@@ -114,6 +114,7 @@ const authController = {
         });
       }
 
+      // Crear usuario
       await Usuario.create({
         username,
         password,
@@ -121,6 +122,7 @@ const authController = {
         email,
       });
 
+      // Redirigir al login después de registrarse
       res.redirect("/login");
     } catch (error) {
       console.error(error);
@@ -134,19 +136,19 @@ const authController = {
 
   // Cerrar sesión
   logout: (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error(err);
-      }
-      res.redirect("/login");
-    });
+    usuarioActual = null;
+    res.redirect("/login");
   },
 };
 
-// Exportamos
+// Función para obtener el usuario actual
+const getUsuarioActual = () => {
+  return usuarioActual;
+};
+
 module.exports = {
   authController,
   isAuthenticated,
-  isAdmin,
   isGuest,
+  getUsuarioActual,
 };

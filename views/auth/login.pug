@@ -11,8 +11,8 @@ block contenido
 
     form(action="/login", method="POST")
       div
-        label(for="username") Usuario:
-        input(type="text", id="username", name="username", value=datos && datos.username ? datos.username : '', required)
+        label(for="email") E-mail:
+        input(type="text", id="email", name="email", value=datos && datos.username ? datos.email : '', required)
       
       div
         label(for="password") Contraseña:
