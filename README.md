@@ -170,6 +170,7 @@ Durante el desarrollo de esta etapa se utilizaron asistentes de Inteligencia Art
 - Optimización en la redacción y formato de la documentación técnica y manuales de despliegue.
 
 *Nota: Toda la arquitectura, lógica de negocio y definiciones de base de datos fueron diseñadas, evaluadas e implementadas por el equipo de desarrollo.*
+
 ---
 
 ## Bibliografía
