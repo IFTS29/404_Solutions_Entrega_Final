@@ -71,6 +71,7 @@ const clienteController = {
         req.params.id,
         {
           nombre: req.body.nombre,
+          razonSocial: req.body.razonSocial,
           tipoDoc: req.body.tipoDoc,
           nroDoc: req.body.nroDoc,
           email: req.body.email,
