@@ -20,14 +20,28 @@ header {
     margin-bottom: 2rem;
 }
 
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
 nav ul {
     display: flex;
     justify-content: center;
+    align-items: center;
     list-style: none;
+    position: relative;
 }
 
 nav ul li {
     margin: 0 15px;
+}
+
+nav ul li:last-child {
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
 }
 
 nav ul li a {
@@ -43,6 +57,7 @@ nav ul li a:hover {
 main {
     max-width: 900px;
     margin: 0 auto;
+    margin-top: 30px;
     padding: 20px;
     background: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -103,7 +118,7 @@ th {
 
 .acciones-container button {
     border: 1px solid #cc0000;
-    color: #cc0000; 
+    color: #cc0000;
 }
 
 .acciones-container button:hover {
@@ -221,9 +236,9 @@ td div {
 .btn-cancelar {
     display: inline-block;
     padding: 10px 20px;
-    color: #666;             
+    color: #666;
     text-decoration: none;
-    border: 1px solid #ccc;  
+    border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
     font-weight: bold;
@@ -240,7 +255,7 @@ td div {
 
 
 .btn-guardar {
-    flex: 1; 
+    flex: 1;
     background-color: #18bc9c;
     color: white;
     padding: 10px;
@@ -268,25 +283,107 @@ footer {
 
 /* Para que los botones editar y eliminar tengan el mismo tamaño */
 
-td div a, td div button {
+td div a,
+td div button {
     width: 80px;
     margin-top: 2px;
 }
 
 /* Para que los botones registar y cancelar tengan el mismo tamaño */
 
-form div button, form div a {
+form div button,
+form div a {
     width: 200px;
 }
 
 /* Para que el label y el input del campo nombre tengan el mismo tamaño */
-#campo-nombre label, #campo-nombre input {
+#campo-nombre label,
+#campo-nombre input {
     display: flex;
     width: 100%;
 }
 
 /* Para que el label y el input dela razón social tengan el mismo tamaño */
-#campo-razonSocial label, #campo-razonSocial input {
+#campo-razonSocial label,
+#campo-razonSocial input {
     display: flex;
     width: 100%;
+    text-align: center;
+}
+
+.contenedor {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 5px;
+    /* background-image: url('/img/business.jpg'); */
+    background-image: url('/img/finanzas.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 500px;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 15px;
+}
+
+
+/* Estilos para login y register */
+.login-container,
+.register-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.register-container {
+    max-width: 500px;
+}
+
+.login-header,
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1,
+.register-header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.login-header p,
+.register-header p {
+    color: #7f8c8d;
+}
+
+.register-link,
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-link a,
+.login-link a {
+    color: #18bc9c;
+    text-decoration: none;
+}
+
+.register-link a:hover,
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Ajustes para los formularios de login/register */
+.login-container form,
+.register-container form {
+    max-width: 100%;
+}
+
+.login-container button,
+.register-container button {
+    width: 100%;
+    margin-top: 10px;
 }

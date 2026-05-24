@@ -6,11 +6,7 @@ block contenido
     if error
         span.error-msg= error
 
-    form(action="/nuevo" method="POST")
-        div
-            label(for="id") ID del Producto (Manual):
-            input(type="number" name="id", required=true, placeholder="Ej: 10")
-        
+    form(action="/productos/nuevo" method="POST")
         div
             label(for="nombre") Nombre del Producto:
             input(type="text" name="nombre", required=true, value=datos ? datos.nombre : '')
