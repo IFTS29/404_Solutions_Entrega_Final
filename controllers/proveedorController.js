@@ -72,8 +72,8 @@ const proveedorController = {
         req.params.id,
         {
           nombre: req.body.nombre,
-          razonSocial: req.body.razonSocial,
           tipoDoc: req.body.tipoDoc,
+          razonSocial: req.body.razonSocial,
           nroDoc: req.body.nroDoc,
           email: req.body.email,
           telefono: req.body.telefono,
