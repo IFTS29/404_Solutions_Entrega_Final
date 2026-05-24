@@ -1,5 +1,9 @@
 # TodoStock S.A. - Sistema de Gestión de Inventario
 
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+
 ## Proyecto: Desarrollo de Sistemas Web (Back End)
 
 **Tecnicatura Superior en Desarrollo de Software**
@@ -13,6 +17,20 @@ Este proyecto es la **Segunda Entrega** de la materia de Desarrollo de Sistemas 
 
 La plataforma está diseñada para la distribuidora de productos de limpieza **TodoStock S.A.** y permite gestionar el ciclo de vida de productos, clientes y proveedores, con control de stock y acceso restringido por usuario.
 
+
+---
+
+## 👥 Integrantes del Equipo y Roles
+
+El desarrollo se gestionó dividiendo el trabajo por capas de la arquitectura MVC y por módulos de negocio, consolidando la entrega mediante una revisión colaborativa.
+
+| Integrante / GitHub | Rol y Responsabilidad Principal |
+| :--- | :--- |
+| **Aiello, Mariana**<br>[🔗 Ver Perfil](https://github.com/Aiello-M) | **Desarrollo de Finanzas, Integración de Datos y Documentación de Repositorio**<br>Desarrollo del módulo de Finanzas (consulta cruzada de colecciones de clientes/proveedores) y confección del archivo `README.md`. |
+| **Flores, Miguel Ángel**<br>[🔗 Ver Perfil](https://github.com/mikefink22) | **Desarrollo de Clientes y Verificación de Calidad (QA)**<br>Desarrollo del módulo de Clientes (persistencia asíncrona con validaciones) y ejecución de la demostración funcional en vivo. |
+| **González, Mario**<br>[🔗 Ver Perfil](https://github.com/elavincho) | **Infraestructura y Seguridad**<br>Configuración de la conexión global a MongoDB Atlas, definición de middlewares de protección de rutas y sistema de autenticación de usuarios. |
+| **Rodríguez, Raquel**<br>[🔗 Ver Perfil](https://github.com/raquerh) | **Desarrollo de Productos e Identificadores**<br>Desarrollo del módulo de Productos (persistencia asíncrona con validaciones) y migración de IDs manuales a `ObjectId` nativos. |
+| **Thomas, Valeria**<br>[🔗 Ver Perfil](https://github.com/Irinath) | **Desarrollo de Proveedores e Informe Técnico**<br>Desarrollo del módulo de Proveedores (persistencia asíncrona con validaciones) y redacción del documento PDF de entrega final. |
 ---
 
 ## Novedades respecto a la Primera Entrega
@@ -93,6 +111,13 @@ La plataforma está diseñada para la distribuidora de productos de limpieza **T
 
 ## Instalación y Configuración
 
+### Prerrequisitos
+- **Node.js** (v18 o superior)
+- **Git**
+- Una cuenta en **MongoDB Atlas** (o un servidor local de MongoDB).
+
+---
+
 ### 1. Clonar el repositorio
 
 ```bash
@@ -127,6 +152,24 @@ npm start
 
 El servidor estará disponible en `http://localhost:3000`.
 
+---
+
+## Uso Básico
+
+1. Al ingresar a la ruta principal, el sistema redirigirá automáticamente a la pantalla de Login.
+2. Hacer clic en "Registrarse" para crear un usuario inicial.
+3. Una vez iniciada la sesión, se habilitará el acceso al Dashboard principal y a los módulos de Productos, Clientes, Proveedores y Finanzas.
+
+---
+
+## Uso de Inteligencia Artificial
+
+Durante el desarrollo de esta etapa se utilizaron asistentes de Inteligencia Artificial como herramientas de apoyo técnico, limitándose su uso a las siguientes tareas:
+
+- Asistencia en la depuración de código (debugging) y resolución de errores asincrónicos.
+- Optimización en la redacción y formato de la documentación técnica y manuales de despliegue.
+
+*Nota: Toda la arquitectura, lógica de negocio y definiciones de base de datos fueron diseñadas, evaluadas e implementadas por el equipo de desarrollo.*
 ---
 
 ## Bibliografía
