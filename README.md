@@ -1,7 +1,7 @@
 # TodoStock S.A. - Sistema de Gestión de Inventario
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-1572B6?style=for-the-badge&logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ## Proyecto: Desarrollo de Sistemas Web (Back End)
