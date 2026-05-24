@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const finanzasController = require('../controllers/finanzasController');
+const homeController = require('../controllers/homeController');
 const { isAuthenticated } = require('../controllers/authController');
 
-router.get("/", isAuthenticated, finanzasController.resumen);
+// Ruta principal protegida
+router.get('/', isAuthenticated, homeController.index);
 
 module.exports = router;

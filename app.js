@@ -1,27 +1,41 @@
-const express = require("express");
-const app = express();
-const path = require("path");
-const rutasProductos = require("./routes/productoRoutes");
-const clienteRoutes = require("./routes/clienteRoutes");
-const proveedorRoutes = require("./routes/proveedorRoutes");
-const finanzasRoutes = require("./routes/finanzasRoutes");
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config();
 
-// Configuración de Pug y estaticos
-app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "views"));
+const app = express();
+
+// Middleware para pasar el usuario a todas las vistas
+const { getUsuarioActual } = require('./controllers/authController');
+
+app.use((req, res, next) => {
+  res.locals.usuario = getUsuarioActual();
+  next();
+});
+
+// Configuración de vistas
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 // Middlewares
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true })); // Para leer formularios
-app.use(express.json()); // Para Thunder Client
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Uso de las rutas
-app.use("/", rutasProductos);
-app.use("/clientes", clienteRoutes);
-app.use("/proveedores", proveedorRoutes);
-app.use("/finanzas", finanzasRoutes);
+// Conexión a MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('MongoDB conectado correctamente'))
+  .catch(err => console.error('Error conectando a MongoDB:', err));
 
-const PORT = 3000;
+// Rutas
+app.use('/', require('./routes/homeRoutes'));
+app.use('/', require('./routes/authRoutes'));
+app.use('/productos', require('./routes/productoRoutes'));
+app.use('/clientes', require('./routes/clienteRoutes'));
+app.use('/proveedores', require('./routes/proveedorRoutes'));
+app.use('/finanzas', require('./routes/finanzasRoutes'));
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

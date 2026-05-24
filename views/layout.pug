@@ -2,21 +2,26 @@ doctype html
 html(lang="es")
   head
     meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title #{titulo} | TodoStock S.A.
-    link(rel="stylesheet" href="/css/styles.css")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= titulo
+    link(rel="stylesheet", href="/css/styles.css")
+    style
+      include ../public/css/styles.css
+  
   body
-    header
-      nav
-        ul
-          li: a(href="/") Stock
-          li: a(href="/clientes") Clientes
-          li: a(href='/proveedores') Proveedores
-          li: a(href='/finanzas') Finanzas
-
-
+    if usuario
+      header
+        nav
+          ul
+            li: a(href="/") Home
+            li: a(href="/productos") Productos
+            li: a(href="/clientes") Clientes
+            li: a(href="/proveedores") Proveedores
+            li: a(href="/finanzas") Finanzas
+            li: a(href="/logout") Salir
+    
     main
       block contenido
-
+    
     footer
-      p &copy; 2026 - Primer Entrega Backend - TodoStock S.A. - Grupo 404 Solutions
+      p &copy; 2026 TodoStock S.A. - Todos los derechos reservados

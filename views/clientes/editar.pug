@@ -3,11 +3,7 @@ extends ../layout
 block contenido
     h1 Editar Cliente: #{cliente.tipoDoc === 'DNI' ? cliente.nombre : cliente.razonSocial}
 
-    form(action=`/clientes/editar/${cliente.id}` method="POST")
-        div
-            label ID:
-            input(type="number" value=cliente.id disabled)
-
+    form(action=`/clientes/editar/${cliente._id}` method="POST")
         div
             label(for="tipoDoc") Tipo de Documento:
             select(id="tipoDoc" name="tipoDoc")
@@ -44,7 +40,7 @@ block contenido
          
         div.form-actions
             button(type="submit").btn-guardar Guardar Cambios
-            a(href="/clientes").btn-cancelar Cancelar
+            a(href="/clientes/listar").btn-cancelar Cancelar
 
     script.
         const select = document.getElementById('tipoDoc');

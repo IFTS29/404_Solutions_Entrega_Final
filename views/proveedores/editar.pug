@@ -3,11 +3,7 @@ extends ../layout
 block contenido
     h1 Editar Proveedor: #{proveedor.tipoDoc === 'DNI' ? proveedor.nombre : proveedor.razonSocial}
 
-    form(action=`/proveedores/editar/${proveedor.id}` method="POST")
-        div
-            label ID:
-            input(type="number" value=proveedor.id disabled)
-
+    form(action=`/proveedores/editar/${proveedor._id}` method="POST")
         div
             label(for="tipoDoc") Tipo de Documento:
             select(id="tipoDoc" name="tipoDoc")
@@ -44,7 +40,7 @@ block contenido
             
         div.form-actions
             button(type="submit").btn-guardar Guardar Cambios
-            a(href="/proveedores").btn-cancelar Cancelar
+            a(href="/proveedores/listar").btn-cancelar Cancelar
 
     script.
         const select = document.getElementById('tipoDoc');
