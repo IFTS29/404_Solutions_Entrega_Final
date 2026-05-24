@@ -167,7 +167,7 @@ El servidor estará disponible en `http://localhost:3000`.
 Durante el desarrollo de esta etapa se utilizaron asistentes de Inteligencia Artificial como herramientas de apoyo técnico, limitándose su uso a las siguientes tareas:
 
 - Asistencia en la depuración de código (debugging) y resolución de errores asincrónicos.
-- Optimización en la redacción y formato de la documentación técnica y manuales de despliegue.
+- Optimización en la redacción y formato de la documentación técnica y el archivo Readme.
 
 *Nota: Toda la arquitectura, lógica de negocio y definiciones de base de datos fueron diseñadas, evaluadas e implementadas por el equipo de desarrollo.*
 
