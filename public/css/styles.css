@@ -20,14 +20,28 @@ header {
     margin-bottom: 2rem;
 }
 
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
 nav ul {
     display: flex;
     justify-content: center;
+    align-items: center;
     list-style: none;
+    position: relative;
 }
 
 nav ul li {
     margin: 0 15px;
+}
+
+nav ul li:last-child {
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
 }
 
 nav ul li a {
