@@ -3,10 +3,10 @@ extends ../layout
 block contenido
     h1 Editar Producto: #{producto.nombre}
 
-    form(action=`/productos/editar/${producto.id}` method="POST")
+    form(action=`/productos/editar/${producto._id}` method="POST")
         div
             label ID (No editable):
-            input(type="number" value=producto.id disabled)
+            input(type="text" value=producto._id disabled)
         div
             label Nombre:
             input(type="text" name="nombre" value=producto.nombre required)

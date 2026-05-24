@@ -3,7 +3,7 @@ const Producto = require('../models/Producto');
 const productoController = {
     index: async (req, res) => {
         try {
-            const productos = await Producto.find().sort({ id: 1 });
+            const productos = await Producto.find().sort({ createdAt: 1 });
             res.render('productos/index', {
                 titulo: 'Inventario TodoStock S.A.',
                 productos: productos
@@ -24,13 +24,7 @@ const productoController = {
 
     almacenar: async (req, res) => {
         try {
-            const existe = await Producto.findOne({ id: parseInt(req.body.id) });
-            if (existe) {
-                throw new Error(`El ID ${req.body.id} ya está en uso.`);
-            }
-
             await Producto.create({
-                id: parseInt(req.body.id),
                 nombre: req.body.nombre,
                 categoria: req.body.categoria,
                 precio: parseFloat(req.body.precio),
@@ -49,7 +43,7 @@ const productoController = {
 
     formEditar: async (req, res) => {
         try {
-            const producto = await Producto.findOne({ id: parseInt(req.params.id) });
+            const producto = await Producto.findById(req.params.id);
             if (!producto) {
                 return res.status(404).send('Producto no encontrado');
             }
@@ -62,8 +56,8 @@ const productoController = {
 
     actualizar: async (req, res) => {
         try {
-            await Producto.findOneAndUpdate(
-                { id: parseInt(req.params.id) },
+            await Producto.findByIdAndUpdate(
+                req.params.id,
                 {
                     nombre: req.body.nombre,
                     categoria: req.body.categoria,
@@ -82,7 +76,7 @@ const productoController = {
 
     eliminar: async (req, res) => {
         try {
-            await Producto.findOneAndDelete({ id: parseInt(req.params.id) });
+            await Producto.findByIdAndDelete(req.params.id);
             res.redirect('/productos');
         } catch (error) {
             console.error(error);

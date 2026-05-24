@@ -3,10 +3,10 @@ extends ../layout
 block contenido
     h1 Editar Cliente: #{cliente.tipoDoc === 'DNI' ? cliente.nombre : cliente.razonSocial}
 
-    form(action=`/clientes/editar/${cliente.id}` method="POST")
+    form(action=`/clientes/editar/${cliente._id}` method="POST")
         div
             label ID:
-            input(type="number" value=cliente.id disabled)
+            input(type="text" value=cliente._id disabled)
 
         div
             label(for="tipoDoc") Tipo de Documento:

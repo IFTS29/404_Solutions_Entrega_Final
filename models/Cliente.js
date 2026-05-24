@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 const clienteSchema = new mongoose.Schema(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
     tipoDoc: {
       type: String,
       enum: ["DNI", "CUIT"],

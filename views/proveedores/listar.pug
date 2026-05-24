@@ -19,16 +19,16 @@ block contenido
             tbody
                 each prod in proveedores
                     tr
-                        td= prod.id
+                        td= prod._id
                         td #{prod.tipoDoc}: #{prod.nroDoc}
                         td= prod.tipoDoc === 'DNI' ? prod.nombre : prod.razonSocial
                         td= prod.email
                         td= prod.telefono
                         td
                             div.acciones-container 
-                                a(href=`/proveedores/editar/${prod.id}`) Editar
+                                a(href=`/proveedores/editar/${prod._id}`) Editar
 
-                                form(action=`/proveedores/eliminar/${prod.id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este proveedor?')")
+                                form(action=`/proveedores/eliminar/${prod._id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este proveedor?')")
                                     button.btn-accion.btn-borrar(type="submit") Eliminar
     else
         p No hay proveedores registrados en el sistema.

@@ -9,7 +9,7 @@ const proveedorController = {
 
   listar: async (req, res) => {
     try {
-      const proveedores = await Proveedor.find().sort({ id: 1 });
+      const proveedores = await Proveedor.find().sort({ createdAt: 1 });
       res.render("proveedores/listar", {
         titulo: "Proveedores - TodoStock S.A.",
         proveedores,
@@ -30,13 +30,7 @@ const proveedorController = {
 
   almacenar: async (req, res) => {
     try {
-      const existe = await Proveedor.findOne({ id: parseInt(req.body.id) });
-      if (existe) {
-        throw new Error(`El ID ${req.body.id} ya está en uso.`);
-      }
-
       await Proveedor.create({
-        id: parseInt(req.body.id),
         tipoDoc: req.body.tipoDoc,
         nroDoc: req.body.nroDoc,
         nombre: req.body.tipoDoc === "DNI" ? req.body.nombre : null,
@@ -58,9 +52,7 @@ const proveedorController = {
 
   formEditar: async (req, res) => {
     try {
-      const proveedor = await Proveedor.findOne({
-        id: parseInt(req.params.id),
-      });
+      const proveedor = await Proveedor.findById(req.params.id);
       if (!proveedor) {
         return res.status(404).send("Proveedor no encontrado");
       }
@@ -76,8 +68,8 @@ const proveedorController = {
 
   actualizar: async (req, res) => {
     try {
-      await Proveedor.findOneAndUpdate(
-        { id: parseInt(req.params.id) },
+      await Proveedor.findByIdAndUpdate(
+        req.params.id,
         {
           nombre: req.body.nombre,
           tipoDoc: req.body.tipoDoc,
@@ -98,7 +90,7 @@ const proveedorController = {
 
   eliminar: async (req, res) => {
     try {
-      await Proveedor.findOneAndDelete({ id: parseInt(req.params.id) });
+      await Proveedor.findByIdAndDelete(req.params.id);
       res.redirect("/proveedores/listar");
     } catch (error) {
       console.error(error);

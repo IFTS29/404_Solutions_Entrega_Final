@@ -3,10 +3,10 @@ extends ../layout
 block contenido
     h1 Editar Proveedor: #{proveedor.tipoDoc === 'DNI' ? proveedor.nombre : proveedor.razonSocial}
 
-    form(action=`/proveedores/editar/${proveedor.id}` method="POST")
+    form(action=`/proveedores/editar/${proveedor._id}` method="POST")
         div
             label ID:
-            input(type="number" value=proveedor.id disabled)
+            input(type="text" value=proveedor._id disabled)
 
         div
             label(for="tipoDoc") Tipo de Documento:

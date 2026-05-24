@@ -20,7 +20,7 @@ block contenido
             tbody
                 each prod in productos
                     tr
-                        td(style="text-align: center;")= prod.id
+                        td(style="text-align: center;")= prod._id
                         td= prod.nombre
                         td= prod.categoria
                         td(style="text-align: right;") $ #{prod.precio}
@@ -32,9 +32,9 @@ block contenido
                                 span(style="color: green; font-weight: bold; display:flex; text-align: center;") STOCK OK
                         td
                             div.acciones-container 
-                                a(href=`/productos/editar/${prod.id}`) Editar
+                                a(href=`/productos/editar/${prod._id}`) Editar
 
-                                form(action=`/productos/eliminar/${prod.id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este producto?')")
+                                form(action=`/productos/eliminar/${prod._id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este producto?')")
                                     button.btn-accion.btn-borrar(type="submit") Eliminar
                 else
                     p No hay productos registrados en el sistema.

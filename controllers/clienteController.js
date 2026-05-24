@@ -9,7 +9,7 @@ const clienteController = {
 
   listar: async (req, res) => {
     try {
-      const clientes = await Cliente.find().sort({ id: 1 });
+      const clientes = await Cliente.find().sort({ createdAt: 1 });
       res.render("clientes/listar", {
         titulo: "Clientes - TodoStock S.A.",
         clientes,
@@ -30,13 +30,7 @@ const clienteController = {
 
   almacenar: async (req, res) => {
     try {
-      const existe = await Cliente.findOne({ id: parseInt(req.body.id) });
-      if (existe) {
-        throw new Error(`El ID ${req.body.id} ya está en uso.`);
-      }
-
       const clienteLimpio = {
-        id: parseInt(req.body.id),
         tipoDoc: req.body.tipoDoc,
         nroDoc: req.body.nroDoc,
         nombre: req.body.tipoDoc === "DNI" ? req.body.nombre : null,
@@ -60,7 +54,7 @@ const clienteController = {
 
   formEditar: async (req, res) => {
     try {
-      const cliente = await Cliente.findOne({ id: parseInt(req.params.id) });
+      const cliente = await Cliente.findById(req.params.id);
       if (!cliente) {
         return res.status(404).send("Cliente no encontrado");
       }
@@ -73,8 +67,8 @@ const clienteController = {
 
   actualizar: async (req, res) => {
     try {
-      await Cliente.findOneAndUpdate(
-        { id: parseInt(req.params.id) },
+      await Cliente.findByIdAndUpdate(
+        req.params.id,
         {
           nombre: req.body.nombre,
           tipoDoc: req.body.tipoDoc,
@@ -95,7 +89,7 @@ const clienteController = {
 
   eliminar: async (req, res) => {
     try {
-      await Cliente.findOneAndDelete({ id: parseInt(req.params.id) });
+      await Cliente.findByIdAndDelete(req.params.id);
       res.redirect("/clientes/listar");
     } catch (error) {
       console.error(error);
