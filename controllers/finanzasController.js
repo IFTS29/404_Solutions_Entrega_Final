@@ -9,7 +9,7 @@ const finanzasController = {
       const listaFinanzas = [];
 
       // procesar clientes
-      const clientes = await Cliente.find().sort({ id: 1 });
+      const clientes = await Cliente.find().sort({ createdAt: 1 });
       
       clientes.forEach((c) => {
         // FORZAR a que sea número - SOLUCIÓN PRINCIPAL
@@ -27,14 +27,14 @@ const finanzasController = {
         // Redondear a 2 decimales
         saldo = Math.round(saldo * 100) / 100;
         
-        console.log(`Cliente ${c.id}: saldo original = ${c.saldoCuentaCorriente}, convertido = ${saldo}`);
+        console.log(`Cliente ${c._id}: saldo original = ${c.saldoCuentaCorriente}, convertido = ${saldo}`);
 
         if (saldo > 0) totalCobrar += saldo;
         if (saldo < 0) totalPagar += Math.abs(saldo);
 
         listaFinanzas.push({
           entidad: "Cliente",
-          id: c.id,
+          id: c._id,
           nombre: c.tipoDoc === "DNI" ? (c.nombre || 'Sin nombre') : (c.razonSocial || 'Sin razón social'),
           tipo: c.tipoDoc,
           nroDoc: c.nroDoc,
@@ -43,7 +43,7 @@ const finanzasController = {
       });
 
       // procesar proveedores
-      const proveedores = await Proveedor.find().sort({ id: 1 });
+      const proveedores = await Proveedor.find().sort({ createdAt: 1 });
       
       proveedores.forEach((p) => {
         // FORZAR a que sea número - SOLUCIÓN PRINCIPAL
@@ -59,14 +59,14 @@ const finanzasController = {
         
         saldo = Math.round(saldo * 100) / 100;
         
-        console.log(`Proveedor ${p.id}: saldo original = ${p.saldoCuentaCorriente}, convertido = ${saldo}`);
+        console.log(`Proveedor ${p._id}: saldo original = ${p.saldoCuentaCorriente}, convertido = ${saldo}`);
 
         if (saldo > 0) totalCobrar += saldo;
         if (saldo < 0) totalPagar += Math.abs(saldo);
 
         listaFinanzas.push({
           entidad: "Proveedor",
-          id: p.id,
+          id: p._id,
           nombre: p.tipoDoc === "DNI" ? (p.nombre || 'Sin nombre') : (p.razonSocial || 'Sin razón social'),
           tipo: p.tipoDoc,
           nroDoc: p.nroDoc,

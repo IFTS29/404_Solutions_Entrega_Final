@@ -5,10 +5,6 @@ block contenido
 
     form(action=`/proveedores/editar/${proveedor._id}` method="POST")
         div
-            label ID:
-            input(type="text" value=proveedor._id disabled)
-
-        div
             label(for="tipoDoc") Tipo de Documento:
             select(id="tipoDoc" name="tipoDoc")
                 option(value="DNI" selected=proveedor.tipoDoc === "DNI") DNI

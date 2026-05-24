@@ -5,9 +5,6 @@ block contenido
 
     form(action=`/productos/editar/${producto._id}` method="POST")
         div
-            label ID (No editable):
-            input(type="text" value=producto._id disabled)
-        div
             label Nombre:
             input(type="text" name="nombre" value=producto.nombre required)
         div

@@ -10,7 +10,6 @@ block contenido
         table
             thead
                 tr
-                    th ID
                     th Nombre
                     th Categoría
                     th Precio
@@ -20,7 +19,6 @@ block contenido
             tbody
                 each prod in productos
                     tr
-                        td(style="text-align: center;")= prod._id
                         td= prod.nombre
                         td= prod.categoria
                         td(style="text-align: right;") $ #{prod.precio}
