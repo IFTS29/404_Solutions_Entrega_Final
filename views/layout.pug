@@ -1,12 +1,11 @@
 doctype html
+doctype html
 html(lang="es")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title= titulo
     link(rel="stylesheet", href="/css/styles.css")
-    style
-      include ../public/css/styles.css
   
   body
     if usuario
@@ -19,6 +18,12 @@ html(lang="es")
             li: a(href="/proveedores") Proveedores
             li: a(href="/finanzas") Finanzas
             li: a(href="/logout") Salir
+    else
+      header
+        nav
+          ul
+            li: a(href="/login") Iniciar Sesión
+            li: a(href="/register") Registrarse
     
     main
       block contenido
