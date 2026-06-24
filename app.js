@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-// const mongoose = require('mongoose');
 const path = require('path');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -14,7 +13,7 @@ const proveedorRoutes = require("./routes/proveedorRoutes");
 const finanzasRoutes = require("./routes/finanzasRoutes");
 // const ordenPagoRoutes = require("./routes/ordenPagoRoutes");
 // const facturaProveedorRoutes = require("./routes/facturaProveedorRoutes");
-// const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/authRoutes");
 // const adminRoutes = require("./routes/adminRoutes");
 // const facturaClienteRoutes = require("./routes/facturaClienteRoutes");
 // const notaDeDebitoRoutes = require("./routes/notaDeDebitoRoutes");
@@ -84,6 +83,15 @@ app.use("/finanzas", requireLogin, finanzasRoutes);
 // app.use("/notas-debito", requireLogin, notaDeDebitoRoutes);
 // app.use("/notas-credito", requireLogin, notaDeCreditoRoutes);
 // app.use("/presupuestos", requireLogin, presupuestoRoutes);
+
+// Redireccionar raíz a login o dashboard
+app.get("/", (req, res) => {
+  // if (req.session?.usuario) {
+  //   res.redirect('/dashboard');
+  // } else {
+  res.redirect('/login');
+  // }
+});
 
 // const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
