@@ -6,6 +6,7 @@ const MongoStore = require('connect-mongo');
 const connectDB = require('./config/database');
 require('dotenv').config();
 
+
 const homeRoutes = require("./routes/homeRoutes");
 const rutasProductos = require("./routes/productoRoutes");
 const clienteRoutes = require("./routes/clienteRoutes");
@@ -14,7 +15,7 @@ const finanzasRoutes = require("./routes/finanzasRoutes");
 // const ordenPagoRoutes = require("./routes/ordenPagoRoutes");
 // const facturaProveedorRoutes = require("./routes/facturaProveedorRoutes");
 const authRoutes = require("./routes/authRoutes");
-// const adminRoutes = require("./routes/adminRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 // const facturaClienteRoutes = require("./routes/facturaClienteRoutes");
 // const notaDeDebitoRoutes = require("./routes/notaDeDebitoRoutes");
 // const notaDeCreditoRoutes = require("./routes/notaDeCreditoRoutes");
@@ -69,7 +70,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/", authRoutes);
 
 // Rutas protegidas (requieren login)
-// app.use("/dashboard", requireLogin, authRoutes);
+app.use("/dashboard", requireLogin, authRoutes);
 app.use("/home", requireLogin, homeRoutes);
 app.use("/productos", requireLogin, rutasProductos);
 app.use("/clientes", requireLogin, clienteRoutes);
@@ -78,7 +79,7 @@ app.use("/finanzas", requireLogin, finanzasRoutes);
 // app.use("/ordenes-pago", requireLogin, ordenPagoRoutes);
 // app.use("/facturas-proveedor", requireLogin, facturaProveedorRoutes);
 // app.use("/home", requireLogin, homeRoutes);
-// app.use("/admin", requireLogin, adminRoutes);
+app.use("/admin", requireLogin, adminRoutes);
 // app.use("/facturas-cliente", requireLogin, facturaClienteRoutes);
 // app.use("/notas-debito", requireLogin, notaDeDebitoRoutes);
 // app.use("/notas-credito", requireLogin, notaDeCreditoRoutes);
@@ -86,11 +87,11 @@ app.use("/finanzas", requireLogin, finanzasRoutes);
 
 // Redireccionar raíz a login o dashboard
 app.get("/", (req, res) => {
-  // if (req.session?.usuario) {
-  //   res.redirect('/dashboard');
-  // } else {
+  if (req.session?.usuario) {
+    res.redirect('/dashboard');
+  } else {
   res.redirect('/login');
-  // }
+  }
 });
 
 // const PORT = process.env.PORT || 3000;
