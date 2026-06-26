@@ -17,63 +17,109 @@ body {
 
 /* Navegación */
 header {
-    display: flex;
-    flex-wrap: wrap;
-    background: #2c3e50;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     color: #fff;
-    padding: 1rem 0;
+    padding: 0;
     margin-bottom: 2rem;
     width: 100%;
-    font-size: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 nav {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    margin-left: 20px;
-    margin-right: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
 }
 
 nav ul {
     display: flex;
-    width: 100%;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
     list-style: none;
-    gap: 15px;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
 }
 
-
+nav ul li {
+    position: relative;
+}
 
 nav ul li a {
     color: #fff;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: block;
+    font-size: 0.95rem;
 }
 
 nav ul li a:hover {
+    background-color: rgba(24, 188, 156, 0.2);
     color: #18bc9c;
+    transform: translateY(-2px);
+}
+
+/* Usuario info en el navbar */
+nav ul li span {
+    color: #ecf0f1;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+}
+
+nav ul li.user-info-nav {
+    padding: 0;
+}
+
+nav ul li .username-nav {
+    color: #ecf0f1;
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: rgba(52, 152, 219, 0.2);
+    border-radius: 6px;
+}
+
+nav ul li .username-nav::before {
+    content: "👤 ";
+    font-size: 1rem;
+}
+
+/* Botón de logout */
+nav ul li a[href="/logout"] {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+nav ul li a[href="/logout"]:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+nav ul li a[href="/logout"]::before {
+    content: "🚪 ";
+    font-size: 0.9rem;
 }
 
 main {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 30px auto;
-    padding: 20px;
+    padding: 30px;
     background: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
 }
 
 h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     color: #2c3e50;
-}
-
-table,
-th,
-td {
-    border: 1px solid #000000;
+    font-size: 2rem;
+    font-weight: 600;
 }
 
 table {
@@ -81,48 +127,72 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
     background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 th,
 td {
-    padding: 12px;
+    padding: 14px 16px;
     text-align: left;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    transition: all 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.01);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .acciones-container a,
 .acciones-container button {
     display: inline-block;
-    padding: 6px 10px;
+    padding: 7px 14px;
     background-color: transparent;
     color: #000;
     text-decoration: none;
     border: 1px solid #333;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 0.8rem;
     cursor: pointer;
-    font-weight: normal;
-    /* line-height: 1; */
+    font-weight: 500;
     text-align: center;
+    transition: all 0.2s ease;
 }
 
 .acciones-container a:hover,
 .acciones-container button:hover {
-    background-color: #f0f0f0;
-    opacity: 0.7;
+    background-color: #333;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
 .acciones-container button {
-    border: 1px solid #cc0000;
-    color: #cc0000;
+    border: 1px solid #dc3545;
+    color: #dc3545;
 }
 
 .acciones-container button:hover {
-    background-color: #f8d7da;
+    background-color: #dc3545;
+    color: white;
 }
 
 td div {
@@ -179,7 +249,7 @@ table td:nth-child(5) {
 form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -190,30 +260,48 @@ form div {
 }
 
 label {
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.95rem;
 }
 
 input,
-select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+select,
+textarea {
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #18bc9c;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(24, 188, 156, 0.1);
 }
 
 button {
-    background-color: #18bc9c;
+    background: linear-gradient(135deg, #18bc9c 0%, #128f76 100%);
     color: white;
-    padding: 10px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(24, 188, 156, 0.3);
 }
 
 button:hover {
-    background-color: #128f76;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(24, 188, 156, 0.4);
 }
 
 .error-msg {
@@ -253,52 +341,87 @@ td div {
     align-items: center;
 }
 
+/* Botones generales */
 .btn-nuevo {
     display: inline-block;
-    padding: 10px 20px;
-    background-color: #18bc9c;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #18bc9c 0%, #128f76 100%);
     color: white;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(24, 188, 156, 0.3);
+}
+
+.btn-nuevo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(24, 188, 156, 0.4);
+}
+
+.btn-volver {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.btn-volver:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-volver::before {
+    content: "← ";
     font-weight: bold;
 }
 
 .btn-cancelar {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 12px 24px;
     color: #666;
     text-decoration: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 600;
     background-color: #f8f9fa;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     text-align: center;
 }
 
 .btn-cancelar:hover {
-    background-color: #e2e6ea;
-    color: #333;
-    border-color: #bbb;
+    background-color: #e9ecef;
+    color: #495057;
+    border-color: #adb5bd;
+    transform: translateY(-2px);
 }
-
 
 .btn-guardar {
     flex: 1;
-    background-color: #18bc9c;
+    background: linear-gradient(135deg, #18bc9c 0%, #128f76 100%);
     color: white;
-    padding: 10px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(24, 188, 156, 0.3);
 }
 
 .btn-guardar:hover {
-    background-color: #128f76;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(24, 188, 156, 0.4);
 }
 
 /* Footer */
@@ -342,11 +465,11 @@ form div a {
     text-align: center;
 }
 
+/* Contenedor de cards para los módulos */
 .contenedor {
     display: flex;
     flex-wrap: wrap;
-    border-radius: 5px;
-    /* background-image: url('/img/business.jpg'); */
+    border-radius: 12px;
     background-image: url('/img/finanzas.webp');
     background-size: cover;
     background-repeat: no-repeat;
@@ -354,7 +477,208 @@ form div a {
     min-height: 500px;
     justify-content: space-evenly;
     align-items: center;
+    gap: 20px;
+    padding: 30px;
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.3);
+}
+
+.contenedor a {
+    display: flex;
+    margin: 15px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.95);
+    width: 250px;
+    height: 150px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.contenedor a:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    background-color: white;
+    border-color: #18bc9c;
+}
+
+.contenedor a h2 {
+    font-size: 1.5rem;
+    color: #555;
+    text-align: center;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.contenedor a:hover h2 {
+    color: #18bc9c;
+}
+
+/* Botones de acción en encabezados */
+.acciones-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Contenedor para botones alineados a la derecha */
+.btn-container-right {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+/* Estilos para badges de stock */
+.badge-stock-bajo {
+    color: #dc3545;
+    font-weight: bold;
+    display: flex;
+    text-align: center;
+}
+
+.badge-stock-ok {
+    color: #28a745;
+    font-weight: bold;
+    display: flex;
+    text-align: center;
+}
+
+/* Formularios inline */
+form.inline-form {
+    display: inline;
+}
+
+/* Botón de acción verde */
+.btn-accion-verde {
+    background-color: #28a745;
+}
+
+.btn-accion-verde:hover {
+    background-color: #218838;
+}
+
+/* Botón de acción rojo */
+.btn-accion-rojo {
+    background-color: #dc3545;
+}
+
+.btn-accion-rojo:hover {
+    background-color: #c82333;
+}
+
+/* Input readonly con fondo gris */
+input[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* Columnas de tabla con alineación específica */
+td.text-right {
+    text-align: right;
+}
+
+td.text-center {
+    text-align: center;
+}
+
+/* Sección de finanzas */
+.finanzas-grid {
+    display: flex;
     gap: 15px;
+    margin-bottom: 25px;
+}
+
+.finanzas-card {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.finanzas-card h3 {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.finanzas-card p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.finanzas-card .monto {
+    color: #333;
+}
+
+.finanzas-card .monto-positivo {
+    color: #28a745;
+}
+
+.finanzas-card .monto-negativo {
+    color: #dc3545;
+}
+
+/* Campos ocultos dinámicamente */
+.campo-oculto {
+    display: none;
+}
+
+/* Contenedor de impresión */
+.no-print {
+    text-align: center;
+    margin-top: 20px;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}
+
+/* Botón imprimir */
+.btn-imprimir {
+    margin-right: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-imprimir:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Contenedor de facturas (órdenes de pago) */
+.facturas-container-hidden {
+    display: none;
+}
+
+/* Espaciado superior para botones */
+.btn-margin-top {
+    margin-top: 10px;
+}
+
+/* Espaciado superior para divs */
+.spacing-top-15 {
+    margin-top: 15px;
+}
+
+.spacing-top-10 {
+    margin-top: 10px;
+}
+
+/* Texto en negrita */
+.font-weight-bold {
+    font-weight: bold;
 }
 
 
@@ -373,25 +697,33 @@ form div a {
 } */
 
 .badge {
-    padding: 5px 10px;
-    border-radius: 4px;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-size: 0.8rem;
-    font-weight: bold;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
 }
 
 .badge-pendiente {
-    background-color: #ffc107;
-    color: #333;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffc107;
 }
 
-.badge-pagado {
-    background-color: #28a745;
-    color: white;
+.badge-pagado,
+.badge-pagada {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #28a745;
 }
 
-.badge-anulado {
-    background-color: #dc3545;
-    color: white;
+.badge-anulado,
+.badge-anulada {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #dc3545;
 }
 
 /* Estilos para Facturación Proveedores */

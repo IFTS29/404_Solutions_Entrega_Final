@@ -1,7 +1,9 @@
 extends ../layout
 
 block contenido
-    h1 Editar Proveedor: #{proveedor.tipoDoc === 'DNI' ? proveedor.nombre : proveedor.razonSocial}
+  a.btn-volver(href='/proveedores/listar') Volver
+  
+  h1 Editar Proveedor: #{proveedor.tipoDoc === 'DNI' ? proveedor.nombre : proveedor.razonSocial}
 
     form(action=`/proveedores/editar/${proveedor._id}` method="POST")
         div

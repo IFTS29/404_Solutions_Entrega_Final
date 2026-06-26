@@ -1,10 +1,12 @@
 extends ../layout
 
 block contenido
+  a.btn-volver(href='/proveedores') Volver
+  
   h1= titulo
   
-  .acciones-header(style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;")
-    a.btn-nuevo(href="/ordenes-pago/nuevo" style="background-color: #28a745;") + Nueva Orden de Pago
+  div.acciones-header
+    a.btn-nuevo(href="/ordenes-pago/nuevo") + Nueva Orden de Pago
   
   if ordenes && ordenes.length > 0
     table
