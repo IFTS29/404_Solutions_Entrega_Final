@@ -35,11 +35,11 @@ app.use(session({
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: false,                     // ✅ mientras tanto, para debug
+    secure: false,                     // mientras tanto, para debug
     sameSite: 'lax'
   },
-  proxy: true,                         // ✅ importante en Vercel
-  trustProxy: 1                        // ✅ crucial para Vercel
+  proxy: true,                         // importante en Vercel
+  trustProxy: 1                        // crucial para Vercel
 }));
 
 
