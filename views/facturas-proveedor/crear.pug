@@ -24,7 +24,7 @@ block contenido
           select(name="proveedorId" id="proveedorId" required)
             option(value="") Seleccione un proveedor
             each proveedor in proveedores
-              option(value=proveedor.id selected=(datos && datos.proveedorId == proveedor.id))
+              option(value=proveedor._id selected=(datos && datos.proveedorId == proveedor.id))
                 | #{proveedor.tipoDoc === 'DNI' ? proveedor.nombre : proveedor.razonSocial} - #{proveedor.nroDoc}
         div
           label(for="puntoVenta") Punto de Venta:
