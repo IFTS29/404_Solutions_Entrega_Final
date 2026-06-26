@@ -27,11 +27,12 @@ const ordenPagoSchema = new mongoose.Schema(
     numero: {
       type: Number,
       unique: true,
-      // 👇 IMPORTANTE: Quitar required, permitir que se genere automáticamente
-      // required: true  // ❌ Comenta o elimina esta línea
+      // Se genera automáticamente en pre-save
     },
+    // ✅ CAMBIADO: Ahora es ObjectId con referencia a Proveedor
     proveedorId: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Proveedor',
       required: true,
     },
     proveedorInfo: {
