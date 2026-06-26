@@ -2,12 +2,17 @@ const FacturaCliente = require("../models/FacturaCliente");
 const Cliente = require("../models/Cliente");
 const StockService = require("../services/stockService");
 const Producto = require("../models/Producto");
+const mongoose = require('mongoose');
 
 const facturaClienteController = {
   // Listar todas las facturas
   index: async (req, res) => {
     try {
-      const facturas = await FacturaCliente.find().sort({ createdAt: -1 });
+      // ✅ Ahora puedes usar populate para obtener los datos del cliente
+      const facturas = await FacturaCliente.find()
+        .populate('clienteId', 'nombre razonSocial nroDoc')
+        .sort({ createdAt: -1 });
+      
       res.render("facturas-cliente/index", {
         titulo: "Facturas de Clientes - TodoStock S.A.",
         facturas: facturas,
@@ -20,7 +25,7 @@ const facturaClienteController = {
 
   formCrear: async (req, res) => {
     try {
-      const clientes = await Cliente.find().sort({ id: 1 });
+      const clientes = await Cliente.find().sort({ nombre: 1 });
       const productos = await StockService.obtenerTodosProductos();
       res.render("facturas-cliente/crear", {
         titulo: "Nueva Factura de Cliente",
@@ -50,8 +55,13 @@ const facturaClienteController = {
         otrosTributos,
       } = req.body;
 
-      // Obtener datos del cliente
-      const cliente = await Cliente.findOne({ id: parseInt(clienteId) });
+      // ✅ Verificar que clienteId sea un ObjectId válido
+      if (!mongoose.Types.ObjectId.isValid(clienteId)) {
+        throw new Error("ID de cliente inválido");
+      }
+
+      // ✅ Buscar por _id directamente (ya no usamos parseInt)
+      const cliente = await Cliente.findById(clienteId);
       if (!cliente) {
         throw new Error("Cliente no encontrado");
       }
@@ -65,6 +75,15 @@ const facturaClienteController = {
           const precioUnitario = parseFloat(detalles.precioUnitario[i]) || 0;
           const importe = cantidad * precioUnitario;
 
+          // ✅ Si hay productoId, asegurarse de que sea ObjectId
+          let productoId = null;
+          if (detalles.productoId && detalles.productoId[i]) {
+            const id = detalles.productoId[i];
+            if (mongoose.Types.ObjectId.isValid(id)) {
+              productoId = id;
+            }
+          }
+
           detallesArray.push({
             codigo: detalles.codigo[i],
             descripcion: detalles.descripcion[i],
@@ -72,10 +91,7 @@ const facturaClienteController = {
             precioUnitario: precioUnitario,
             alicIva: detalles.alicIva[i] || "21%",
             importe: importe,
-            productoId:
-              detalles.productoId && detalles.productoId[i]
-                ? parseInt(detalles.productoId[i])
-                : null,
+            productoId: productoId,
             actualizarStock: true,
           });
         }
@@ -87,7 +103,7 @@ const facturaClienteController = {
       const factura = new FacturaCliente({
         numero: numeroCompleto,
         puntoVenta: parseInt(puntoVenta) || 1,
-        clienteId: parseInt(clienteId),
+        clienteId: clienteId, // ✅ Ahora es ObjectId
         clienteInfo: {
           cuit: cliente.nroDoc,
           razonSocial:
@@ -156,21 +172,27 @@ const facturaClienteController = {
       res.redirect("/facturas-cliente");
     } catch (error) {
       console.error(error);
-      const clientes = await Cliente.find().sort({ id: 1 });
-      const productos = await StockService.obtenerTodosProductos();
-      res.render("facturas-cliente/crear", {
-        titulo: "Nueva Factura de Cliente",
-        clientes: clientes,
-        productos: productos,
-        error: error.message,
-        datos: req.body,
-      });
+      try {
+        const clientes = await Cliente.find().sort({ nombre: 1 });
+        const productos = await StockService.obtenerTodosProductos();
+        res.render("facturas-cliente/crear", {
+          titulo: "Nueva Factura de Cliente",
+          clientes: clientes,
+          productos: productos,
+          error: error.message,
+          datos: req.body,
+        });
+      } catch (err) {
+        res.status(500).send("Error al cargar formulario con error");
+      }
     }
   },
 
   ver: async (req, res) => {
     try {
-      const factura = await FacturaCliente.findById(req.params.id);
+      const factura = await FacturaCliente.findById(req.params.id)
+        .populate('clienteId', 'nombre razonSocial nroDoc telefono direccion');
+      
       if (!factura) {
         return res.status(404).send("Factura no encontrada");
       }
@@ -209,8 +231,8 @@ const facturaClienteController = {
           await StockService.revertirStockDesdeFacturaCliente(factura);
         }
 
-        // Revertir saldo del cliente
-        const cliente = await Cliente.findOne({ id: factura.clienteId });
+        // Revertir saldo del cliente - buscar por _id
+        const cliente = await Cliente.findById(factura.clienteId);
         if (cliente) {
           let saldoActual = parseFloat(cliente.saldoCuentaCorriente) || 0;
           cliente.saldoCuentaCorriente = saldoActual - factura.total;
@@ -296,8 +318,8 @@ const facturaClienteController = {
       if (factura && factura.stockDescontado && factura.estatus !== "Anulada") {
         await StockService.revertirStockDesdeFacturaCliente(factura);
 
-        // Revertir saldo del cliente
-        const cliente = await Cliente.findOne({ id: factura.clienteId });
+        // Revertir saldo del cliente - buscar por _id
+        const cliente = await Cliente.findById(factura.clienteId);
         if (cliente) {
           let saldoActual = parseFloat(cliente.saldoCuentaCorriente) || 0;
           cliente.saldoCuentaCorriente = saldoActual - factura.total;

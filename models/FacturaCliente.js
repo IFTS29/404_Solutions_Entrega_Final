@@ -8,7 +8,12 @@ const detalleFacturaClienteSchema = new mongoose.Schema({
   precioUnitario: { type: Number, required: true, min: 0 },
   alicIva: { type: String, default: "21%" },
   importe: { type: Number, required: true, min: 0 },
-  productoId: { type: Number, default: null },
+  // ✅ Cambiado a ObjectId para referenciar a Producto
+  productoId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Producto',
+    default: null 
+  },
   actualizarStock: { type: Boolean, default: true },
 });
 
@@ -16,7 +21,12 @@ const facturaClienteSchema = new mongoose.Schema(
   {
     numero: { type: String, required: true, unique: true },
     puntoVenta: { type: Number, required: true, default: 1 },
-    clienteId: { type: Number, required: true },
+    // ✅ CAMBIADO: Ahora es ObjectId con referencia a Cliente
+    clienteId: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Cliente',
+      required: true 
+    },
     clienteInfo: {
       cuit: String,
       razonSocial: String,
