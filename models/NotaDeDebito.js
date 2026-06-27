@@ -4,7 +4,10 @@ const notaDeDebitoSchema = new mongoose.Schema(
   {
     numero: { type: String, required: true, unique: true },
     puntoVenta: { type: Number, required: true, default: 1 },
-    clienteId: { type: Number, required: true },
+    clienteId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Cliente', required: true
+    },
     clienteInfo: {
       cuit: String,
       razonSocial: String,

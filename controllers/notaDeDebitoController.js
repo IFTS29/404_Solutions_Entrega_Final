@@ -1,6 +1,7 @@
 const NotaDeDebito = require("../models/NotaDeDebito");
 const Cliente = require("../models/Cliente");
 const FacturaCliente = require("../models/FacturaCliente");
+const mongoose = require('mongoose');
 
 const notaDeDebitoController = {
   // Listar todas las notas
@@ -20,10 +21,12 @@ const notaDeDebitoController = {
   // Formulario de creación
   formCrear: async (req, res) => {
     try {
-      const clientes = await Cliente.find().sort({ id: 1 });
+      const clientes = await Cliente.find().sort({ createdAt: 1 });
       const facturas = await FacturaCliente.find({
         estatus: { $in: ["Pendiente", "Pagada"] },
-      }).sort({ createdAt: -1 });
+      })
+        .populate('clienteId', 'nombre email razonSocial nroDoc')  // ← Agregar populate
+        .sort({ createdAt: -1 });
 
       res.render("notas-debito/crear", {
         titulo: "Nueva Nota de Débito",
@@ -57,7 +60,10 @@ const notaDeDebitoController = {
       } = req.body;
 
       // Obtener datos del cliente
-      const cliente = await Cliente.findOne({ id: parseInt(clienteId) });
+      if (!mongoose.Types.ObjectId.isValid(clienteId)) {
+        throw new Error("ID de cliente inválido");
+      }
+      const cliente = await Cliente.findById(clienteId);
       if (!cliente) {
         throw new Error("Cliente no encontrado");
       }
@@ -116,7 +122,7 @@ const notaDeDebitoController = {
       const nota = new NotaDeDebito({
         numero: numeroCompleto,
         puntoVenta: parseInt(puntoVenta) || 1,
-        clienteId: parseInt(clienteId),
+        clienteId: clienteId,
         clienteInfo: {
           cuit: cliente.nroDoc,
           razonSocial:
@@ -162,10 +168,12 @@ const notaDeDebitoController = {
       res.redirect("/notas-debito");
     } catch (error) {
       console.error(error);
-      const clientes = await Cliente.find().sort({ id: 1 });
+      const clientes = await Cliente.find().sort({ createdAt: 1 });
       const facturas = await FacturaCliente.find({
         estatus: { $in: ["Pendiente", "Pagada"] },
-      }).sort({ createdAt: -1 });
+      })
+        .populate('clienteId', 'nombre email razonSocial nroDoc')  // Trae estos campos
+        .sort({ createdAt: -1 });
 
       res.render("notas-debito/crear", {
         titulo: "Nueva Nota de Débito",
@@ -237,7 +245,7 @@ const notaDeDebitoController = {
       if (nota && nota.estatus !== "Anulada") {
         // Revertir saldo del cliente si estaba aplicada
         if (nota.estatus === "Aplicada") {
-          const cliente = await Cliente.findOne({ id: nota.clienteId });
+          const cliente = await Cliente.findById(req.params.id);
           if (cliente) {
             let saldoActual = parseFloat(cliente.saldoCuentaCorriente) || 0;
             cliente.saldoCuentaCorriente = saldoActual - nota.total;
@@ -263,7 +271,7 @@ const notaDeDebitoController = {
 
       // Revertir saldo del cliente si estaba aplicada
       if (nota && nota.estatus === "Aplicada") {
-        const cliente = await Cliente.findOne({ id: nota.clienteId });
+        const cliente = await Cliente.findById(req.params.id);
         if (cliente) {
           let saldoActual = parseFloat(cliente.saldoCuentaCorriente) || 0;
           cliente.saldoCuentaCorriente = saldoActual - nota.total;
