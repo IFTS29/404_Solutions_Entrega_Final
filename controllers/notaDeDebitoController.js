@@ -271,7 +271,7 @@ const notaDeDebitoController = {
 
       // Revertir saldo del cliente si estaba aplicada
       if (nota && nota.estatus === "Aplicada") {
-        const cliente = await Cliente.findById(req.params.id);
+        const cliente = await Cliente.findById(nota.clienteId);
         if (cliente) {
           let saldoActual = parseFloat(cliente.saldoCuentaCorriente) || 0;
           cliente.saldoCuentaCorriente = saldoActual - nota.total;
