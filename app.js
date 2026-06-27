@@ -17,7 +17,7 @@ const facturaProveedorRoutes = require("./routes/facturaProveedorRoutes");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const facturaClienteRoutes = require("./routes/facturaClienteRoutes");
-// const notaDeDebitoRoutes = require("./routes/notaDeDebitoRoutes");
+const notaDeDebitoRoutes = require("./routes/notaDeDebitoRoutes");
 // const notaDeCreditoRoutes = require("./routes/notaDeCreditoRoutes");
 // const presupuestoRoutes = require("./routes/presupuestoRoutes");
 
@@ -80,7 +80,7 @@ app.use("/ordenes-pago", requireLogin, ordenPagoRoutes);
 app.use("/facturas-proveedor", requireLogin, facturaProveedorRoutes);
 app.use("/admin", requireLogin, adminRoutes);
 app.use("/facturas-cliente", requireLogin, facturaClienteRoutes);
-// app.use("/notas-debito", requireLogin, notaDeDebitoRoutes);
+app.use("/notas-debito", requireLogin, notaDeDebitoRoutes);
 // app.use("/notas-credito", requireLogin, notaDeCreditoRoutes);
 // app.use("/presupuestos", requireLogin, presupuestoRoutes);
 
@@ -89,7 +89,7 @@ app.get("/", (req, res) => {
   if (req.session?.usuario) {
     res.redirect('/dashboard');
   } else {
-  res.redirect('/login');
+    res.redirect('/login');
   }
 });
 
