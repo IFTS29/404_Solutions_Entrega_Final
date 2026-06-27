@@ -118,7 +118,7 @@ block contenido
     table
       thead
         tr
-          th Código
+          //- th Código
           th Descripción
           th Cantidad
           th P. Unitario
@@ -127,7 +127,7 @@ block contenido
       tbody
         each concepto in nota.conceptos
           tr
-            td.text-left= concepto.codigo || '-'
+            //- td.text-left= concepto.codigo || '-'
             td.text-left= concepto.descripcion
             td= concepto.cantidad
             td= concepto.precioUnitario.toLocaleString('es-AR', {minimumFractionDigits: 2})
