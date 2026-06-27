@@ -33,22 +33,22 @@ block contenido
           label(for="numero") Número de Presupuesto:
           input(type="number" name="numero" id="numero" required value=datos ? datos.numero : '')
         div
-          label(for="fechaValidez") Fecha de Validez:
+          label(for="fechaValidez") Fecha de Vencimiento:
           input(type="date" name="fechaValidez" id="fechaValidez" required value=datos ? datos.fechaValidez : fechaValidezDefault)
-        div
-          label(for="fechaVencimiento") Fecha de Vencimiento (opcional):
-          input(type="date" name="fechaVencimiento" id="fechaVencimiento" value=datos ? datos.fechaVencimiento : '')
+        //- div
+        //-   label(for="fechaVencimiento") Fecha de Vencimiento (opcional):
+        //-   input(type="date" name="fechaVencimiento" id="fechaVencimiento" value=datos ? datos.fechaVencimiento : '')
 
     // Detalle de conceptos - VERSIÓN TARJETAS
     fieldset
       legend Conceptos del Presupuesto
-      
+
       // Contenedor de tarjetas
       #conceptosContainer(style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;")
         // Tarjeta template
         .concepto-card(style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; background-color: #f9f9f9; position: relative;")
           button(type="button" onclick="eliminarConcepto(this)" style="position: absolute; top: 10px; right: 10px; background-color: #dc3545; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;") ✕
-          
+
           div(style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;")
             div
               label(style="font-weight: bold; display: block; margin-bottom: 5px;") Producto:
@@ -56,15 +56,15 @@ block contenido
                 option(value="") -- Seleccionar producto --
                 each producto in productos
                   option(value=producto.id data-nombre=producto.nombre data-precio=producto.precio)
-                    | #{producto.id} - #{producto.nombre}
+                    | #{producto.nombre}
             div
-              label(style="font-weight: bold; display: block; margin-bottom: 5px;") Código:
-              input(type="text" name="conceptos[codigo][]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Código")
-          
+              label(style="font-weight: bold; display: none; margin-bottom: 5px;") Código:
+              input(type="text" name="conceptos[codigo][]" style="display: none; width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Código")
+
           div(style="margin-bottom: 15px;")
             label(style="font-weight: bold; display: block; margin-bottom: 5px;") Descripción:
             input(type="text" name="conceptos[descripcion][]" required style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Descripción del producto/servicio")
-          
+
           div(style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px;")
             div
               label(style="font-weight: bold; display: block; margin-bottom: 5px;") Cantidad:
@@ -81,7 +81,7 @@ block contenido
             div
               label(style="font-weight: bold; display: block; margin-bottom: 5px;") Importe:
               input(type="text" name="conceptos[importe][]" readonly class="importe" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; background-color: #e9ecef; font-weight: bold;")
-      
+
       button(type="button" onclick="agregarConcepto()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px;")
         | + Agregar Producto
 
@@ -122,8 +122,8 @@ block contenido
     fieldset
       legend Observaciones
       div
-        label Observaciones:
-        textarea(name="observaciones" rows="3" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;")= datos ? datos.observaciones : ''
+        //- label Observaciones:
+        textarea(name="observaciones" rows="3" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;")= datos ? datos.observaciones : '' 
 
     div.form-actions(style="margin-top: 20px; text-align: center;")
       button(type="submit" style="padding: 12px 40px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;") Generar Presupuesto
@@ -131,148 +131,148 @@ block contenido
 
     block scripts
     script.
-        function autocompletarProducto(selectElement) {
-        const card = selectElement.closest('.concepto-card');
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-        
-        if (selectedOption && selectedOption.value) {
-            const productoNombre = selectedOption.getAttribute('data-nombre') || '';
-            const productoPrecio = selectedOption.getAttribute('data-precio') || 0;
-            
-            const descripcionInput = card.querySelector('input[name="conceptos[descripcion][]"]');
-            const precioInput = card.querySelector('input[name="conceptos[precioUnitario][]"]');
-            const codigoInput = card.querySelector('input[name="conceptos[codigo][]"]');
-            const cantidadInput = card.querySelector('input[name="conceptos[cantidad][]"]');
-            const importeInput = card.querySelector('input[name="conceptos[importe][]"]');
-            
-            if (descripcionInput) descripcionInput.value = productoNombre;
-            if (precioInput) precioInput.value = productoPrecio;
-            if (codigoInput) codigoInput.value = selectedOption.value;
-            
-            const cantidad = parseFloat(cantidadInput ? cantidadInput.value : 0) || 0;
-            const precio = parseFloat(productoPrecio);
-            if (importeInput) importeInput.value = (cantidad * precio).toFixed(2);
-            
-            recalcularTotales();
-        }
-        }
-        
-        function agregarConcepto() {
-        const container = document.getElementById('conceptosContainer');
-        if (!container) return;
-        
-        const template = container.querySelector('.concepto-card');
-        if (!template) return;
-        
-        const newCard = template.cloneNode(true);
-        
-        newCard.querySelectorAll('input').forEach(input => {
-            if (input.type !== 'button') {
-            input.value = '';
-            }
-        });
-        
-        const selectElement = newCard.querySelector('select');
-        if (selectElement) selectElement.value = '';
-        
-        const cantidadInput = newCard.querySelector('input[name="conceptos[cantidad][]"]');
-        if (cantidadInput) cantidadInput.value = '1';
-        
-        const precioInput = newCard.querySelector('input[name="conceptos[precioUnitario][]"]');
-        if (precioInput) precioInput.value = '0';
-        
-        const importeInput = newCard.querySelector('input[name="conceptos[importe][]"]');
-        if (importeInput) importeInput.value = '';
-        
-        const ivaSelect = newCard.querySelector('select[name="conceptos[alicIva][]"]');
-        if (ivaSelect) ivaSelect.value = '21%';
-        
-        inicializarEventListenersTarjeta(newCard);
-        
-        container.appendChild(newCard);
+      function autocompletarProducto(selectElement) {
+      const card = selectElement.closest('.concepto-card');
+      const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+      if (selectedOption && selectedOption.value) {
+        const productoNombre = selectedOption.getAttribute('data-nombre') || '';
+        const productoPrecio = selectedOption.getAttribute('data-precio') || 0;
+
+        const descripcionInput = card.querySelector('input[name="conceptos[descripcion][]"]');
+        const precioInput = card.querySelector('input[name="conceptos[precioUnitario][]"]');
+        const codigoInput = card.querySelector('input[name="conceptos[codigo][]"]');
+        const cantidadInput = card.querySelector('input[name="conceptos[cantidad][]"]');
+        const importeInput = card.querySelector('input[name="conceptos[importe][]"]');
+
+        if (descripcionInput) descripcionInput.value = productoNombre;
+        if (precioInput) precioInput.value = productoPrecio;
+        if (codigoInput) codigoInput.value = selectedOption.value;
+
+        const cantidad = parseFloat(cantidadInput ? cantidadInput.value : 0) || 0;
+        const precio = parseFloat(productoPrecio);
+        if (importeInput) importeInput.value = (cantidad * precio).toFixed(2);
+
         recalcularTotales();
+      }
+      }
+
+      function agregarConcepto() {
+      const container = document.getElementById('conceptosContainer');
+      if (!container) return;
+
+      const template = container.querySelector('.concepto-card');
+      if (!template) return;
+
+      const newCard = template.cloneNode(true);
+
+      newCard.querySelectorAll('input').forEach(input => {
+        if (input.type !== 'button') {
+        input.value = '';
         }
-        
-        function eliminarConcepto(btn) {
-        const card = btn.closest('.concepto-card');
-        const container = document.getElementById('conceptosContainer');
-        if (!container) return;
-        
-        if (container.querySelectorAll('.concepto-card').length > 1) {
-            card.remove();
-            recalcularTotales();
-        } else {
-            alert('Debe haber al menos un producto en el presupuesto');
-        }
-        }
-        
-        function recalcularImporte(inputElement) {
-        const card = inputElement.closest('.concepto-card');
-        if (!card) return;
-        
+      });
+
+      const selectElement = newCard.querySelector('select');
+      if (selectElement) selectElement.value = '';
+
+      const cantidadInput = newCard.querySelector('input[name="conceptos[cantidad][]"]');
+      if (cantidadInput) cantidadInput.value = '1';
+
+      const precioInput = newCard.querySelector('input[name="conceptos[precioUnitario][]"]');
+      if (precioInput) precioInput.value = '0';
+
+      const importeInput = newCard.querySelector('input[name="conceptos[importe][]"]');
+      if (importeInput) importeInput.value = '';
+
+      const ivaSelect = newCard.querySelector('select[name="conceptos[alicIva][]"]');
+      if (ivaSelect) ivaSelect.value = '21%';
+
+      inicializarEventListenersTarjeta(newCard);
+
+      container.appendChild(newCard);
+      recalcularTotales();
+      }
+
+      function eliminarConcepto(btn) {
+      const card = btn.closest('.concepto-card');
+      const container = document.getElementById('conceptosContainer');
+      if (!container) return;
+
+      if (container.querySelectorAll('.concepto-card').length > 1) {
+        card.remove();
+        recalcularTotales();
+      } else {
+        alert('Debe haber al menos un producto en el presupuesto');
+      }
+      }
+
+      function recalcularImporte(inputElement) {
+      const card = inputElement.closest('.concepto-card');
+      if (!card) return;
+
+      const cantidad = parseFloat(card.querySelector('input[name="conceptos[cantidad][]"]')?.value) || 0;
+      const precio = parseFloat(card.querySelector('input[name="conceptos[precioUnitario][]"]')?.value) || 0;
+      const importe = cantidad * precio;
+
+      const importeInput = card.querySelector('input[name="conceptos[importe][]"]');
+      if (importeInput) importeInput.value = importe.toFixed(2);
+
+      recalcularTotales();
+      }
+
+      function recalcularTotales() {
+      let subtotalNeto = 0;
+      let iva21Total = 0;
+      let iva105Total = 0;
+
+      document.querySelectorAll('.concepto-card').forEach(card => {
         const cantidad = parseFloat(card.querySelector('input[name="conceptos[cantidad][]"]')?.value) || 0;
         const precio = parseFloat(card.querySelector('input[name="conceptos[precioUnitario][]"]')?.value) || 0;
+        const alicIva = card.querySelector('select[name="conceptos[alicIva][]"]')?.value || '21%';
         const importe = cantidad * precio;
-        
-        const importeInput = card.querySelector('input[name="conceptos[importe][]"]');
-        if (importeInput) importeInput.value = importe.toFixed(2);
-        
-        recalcularTotales();
+
+        subtotalNeto += importe;
+        if (alicIva === '21%') {
+        iva21Total += importe * 0.21;
+        } else if (alicIva === '10.5%') {
+        iva105Total += importe * 0.105;
         }
-        
-        function recalcularTotales() {
-        let subtotalNeto = 0;
-        let iva21Total = 0;
-        let iva105Total = 0;
-        
-        document.querySelectorAll('.concepto-card').forEach(card => {
-            const cantidad = parseFloat(card.querySelector('input[name="conceptos[cantidad][]"]')?.value) || 0;
-            const precio = parseFloat(card.querySelector('input[name="conceptos[precioUnitario][]"]')?.value) || 0;
-            const alicIva = card.querySelector('select[name="conceptos[alicIva][]"]')?.value || '21%';
-            const importe = cantidad * precio;
-            
-            subtotalNeto += importe;
-            if (alicIva === '21%') {
-            iva21Total += importe * 0.21;
-            } else if (alicIva === '10.5%') {
-            iva105Total += importe * 0.105;
-            }
+      });
+
+      const otrosTributos = parseFloat(document.getElementById('otrosTributos')?.value) || 0;
+      const total = subtotalNeto + iva21Total + iva105Total + otrosTributos;
+
+      document.getElementById('subtotalNeto').value = subtotalNeto.toLocaleString('es-AR', {minimumFractionDigits: 2});
+      document.getElementById('iva21').value = iva21Total.toLocaleString('es-AR', {minimumFractionDigits: 2});
+      document.getElementById('iva105').value = iva105Total.toLocaleString('es-AR', {minimumFractionDigits: 2});
+      document.getElementById('total').value = total.toLocaleString('es-AR', {minimumFractionDigits: 2});
+      }
+
+      function inicializarEventListenersTarjeta(card) {
+      const productoSelect = card.querySelector('.producto-select');
+      if (productoSelect) {
+        productoSelect.addEventListener('change', function() {
+        autocompletarProducto(this);
         });
-        
-        const otrosTributos = parseFloat(document.getElementById('otrosTributos')?.value) || 0;
-        const total = subtotalNeto + iva21Total + iva105Total + otrosTributos;
-        
-        document.getElementById('subtotalNeto').value = subtotalNeto.toLocaleString('es-AR', {minimumFractionDigits: 2});
-        document.getElementById('iva21').value = iva21Total.toLocaleString('es-AR', {minimumFractionDigits: 2});
-        document.getElementById('iva105').value = iva105Total.toLocaleString('es-AR', {minimumFractionDigits: 2});
-        document.getElementById('total').value = total.toLocaleString('es-AR', {minimumFractionDigits: 2});
-        }
-        
-        function inicializarEventListenersTarjeta(card) {
-        const productoSelect = card.querySelector('.producto-select');
-        if (productoSelect) {
-            productoSelect.addEventListener('change', function() {
-            autocompletarProducto(this);
-            });
-        }
-        
-        const calcularInputs = card.querySelectorAll('.calcular');
-        calcularInputs.forEach(input => {
-            input.addEventListener('change', function() {
-            recalcularImporte(this);
-            });
+      }
+
+      const calcularInputs = card.querySelectorAll('.calcular');
+      calcularInputs.forEach(input => {
+        input.addEventListener('change', function() {
+        recalcularImporte(this);
         });
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.concepto-card').forEach(card => {
-            inicializarEventListenersTarjeta(card);
-        });
-        
-        const otrosTributos = document.getElementById('otrosTributos');
-        if (otrosTributos) {
-            otrosTributos.addEventListener('change', recalcularTotales);
-        }
-        
-        recalcularTotales();
-        });
+      });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.concepto-card').forEach(card => {
+        inicializarEventListenersTarjeta(card);
+      });
+
+      const otrosTributos = document.getElementById('otrosTributos');
+      if (otrosTributos) {
+        otrosTributos.addEventListener('change', recalcularTotales);
+      }
+
+      recalcularTotales();
+      });

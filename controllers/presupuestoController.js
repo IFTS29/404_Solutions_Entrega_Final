@@ -22,7 +22,8 @@ const presupuestoController = {
   // Formulario de creación
   formCrear: async (req, res) => {
     try {
-      const clientes = await Cliente.findById(req.params.id);
+      // CORRECCIÓN: Usar find() en lugar de findById(req.params.id)
+      const clientes = await Cliente.find().sort({ createdAt: 1 });
       const productos = await StockService.obtenerTodosProductos();
 
       // Fecha por defecto: 30 días de validez
@@ -130,6 +131,7 @@ const presupuestoController = {
       res.redirect("/presupuestos");
     } catch (error) {
       console.error(error);
+      // CORRECCIÓN: En caso de error, obtener todos los clientes nuevamente
       const clientes = await Cliente.find().sort({ createdAt: 1 });
       const productos = await StockService.obtenerTodosProductos();
       const fechaDefault = new Date();
