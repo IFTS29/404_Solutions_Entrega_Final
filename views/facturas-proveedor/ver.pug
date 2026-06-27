@@ -117,7 +117,7 @@ block contenido
     table
       thead
         tr
-          th Código
+          //- th Código
           th Descripción
           th Cantidad
           th P. Unitario
@@ -126,7 +126,7 @@ block contenido
       tbody
         each detalle in factura.detalles
           tr
-            td.text-left= detalle.codigo
+            //- td.text-left= detalle.codigo
             td.text-left= detalle.descripcion
             td= detalle.cantidad
             td= detalle.precioUnitario.toLocaleString('es-AR', {minimumFractionDigits: 2})
