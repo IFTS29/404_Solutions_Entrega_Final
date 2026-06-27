@@ -36,12 +36,19 @@ block contenido
           input(type="number" name="numero" id="numero" required value=datos ? datos.numero : '')
         div
           label(for="cae") CAE (Código Autorización):
-          input(type="text" name="cae" id="cae" value=datos ? datos.cae : '')
+          //- CAE con valor por defecto "123456789" pero editable
+          input(type="text" name="cae" id="cae" value=datos && datos.cae ? datos.cae : '123456789')
         div
           label(for="fechaVtoCAE") Fecha Vto. CAE:
-          input(type="date" name="fechaVtoCAE" id="fechaVtoCAE" value=datos ? datos.fechaVtoCAE : '')
+          //- Fecha Vto. CAE con valor por defecto (1 año a partir de hoy)
+          - const hoy = new Date();
+          - const unAnioDespues = new Date(hoy);
+          - unAnioDespues.setFullYear(unAnioDespues.getFullYear() + 1);
+          - const fechaVtoCAEDefault = unAnioDespues.toISOString().split('T')[0];
+          input(type="date" name="fechaVtoCAE" id="fechaVtoCAE" value=datos && datos.fechaVtoCAE ? datos.fechaVtoCAE : fechaVtoCAEDefault)
         div
           label(for="fechaVencimiento") Fecha de Vencimiento Factura:
+          //- Fecha de vencimiento de factura sin valor por defecto
           input(type="date" name="fechaVencimiento" id="fechaVencimiento" value=datos ? datos.fechaVencimiento : '')
 
     // Detalle de productos - VERSIÓN TARJETAS
@@ -114,7 +121,7 @@ block contenido
     fieldset
       legend Observaciones
       div
-        label Observaciones:
+        //- label Observaciones:
         textarea(name="observaciones" rows="3" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;")= datos ? datos.observaciones : ''
 
     div.form-actions(style="margin-top: 20px; text-align: center;")
