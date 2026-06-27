@@ -22,10 +22,10 @@ Este proyecto es la **Entrega Final** de la materia de Desarrollo de Sistemas We
 - ✅ Autenticación segura con bcrypt
 - ✅ Sesiones persistentes con express-session + MongoStore
 - ✅ Sistema de roles y autorización (admin, contador, usuario)
-- ✅ Módulos completos de facturación, notas de crédito/débito, órdenes de pago
+- ✅ Módulos completos de facturación, notas de crédito/débito, órdenes de pago, presupuestos
+- 🚧 Módulo de finanzas (resumen consolidado) en desarrollo
 - ✅ Gestión automática de stock
 - ✅ Middleware de manejo de errores centralizado
-- ✅ Pruebas automatizadas (Jest)
 - ✅ Despliegue en Vercel
 
 La plataforma está diseñada para la distribuidora de productos de limpieza **TodoStock S.A.** y permite gestionar de forma integral productos, clientes, proveedores, facturación y finanzas.
@@ -72,7 +72,7 @@ La plataforma está diseñada para la distribuidora de productos de limpieza **T
 - Notas de crédito (devoluciones)
 - Notas de débito (ajustes)
 - Presupuestos
-- Resumen financiero consolidado
+- 🚧 Resumen financiero consolidado (**en desarrollo**): actualmente muestra saldos de cuenta corriente de clientes y proveedores; falta integrar órdenes de pago, notas y presupuestos en el cálculo
 
 ### 🛡️ Manejo de Errores
 - Middleware centralizado de errores
@@ -97,8 +97,6 @@ La plataforma está diseñada para la distribuidora de productos de limpieza **T
 | **connect-mongo** | 4.6.0 | Store de sesiones en MongoDB |
 | **Pug** | 3.0.4 | Motor de plantillas |
 | **dotenv** | 17.4.2 | Variables de entorno |
-| **Jest** | 29.7.0 | Framework de testing |
-| **Supertest** | 6.3.4 | Testing de rutas HTTP |
 
 ### Patrón de Diseño: MVC (Model-View-Controller)
 
@@ -166,16 +164,11 @@ La plataforma está diseñada para la distribuidora de productos de limpieza **T
 ├── 📂 public/              # Archivos estáticos
 │   ├── 📂 css/
 │   └── 📂 img/
-├── 📂 tests/               # Pruebas automatizadas
-│   ├── calculosFactura.test.js
-│   ├── routes.test.js
-│   └── stockService.test.js
 ├── .env                    # Variables de entorno (no versionado)
 ├── .env.example            # Ejemplo de configuración
 ├── .gitignore
-├── index.js                # Punto de entrada
+├── app.js                  # Punto de entrada
 ├── package.json
-├── jest.config.js          # Configuración de Jest
 ├── vercel.json             # Configuración de despliegue
 └── README.md
 ```
@@ -245,24 +238,7 @@ El servidor estará disponible en `http://localhost:3000`
 
 ## 🧪 Ejecución de Pruebas
 
-El proyecto incluye tests unitarios y de integración con Jest:
-
-```bash
-# Ejecutar todas las pruebas
-npm test
-
-# Ejecutar pruebas en modo watch
-npm run test:watch
-
-# Ejecutar pruebas con reporte de cobertura
-npm run test:coverage
-```
-
-### Tests Implementados
-
-1. **calculosFactura.test.js**: Verifica cálculos de IVA y totales
-2. **routes.test.js**: Prueba rutas públicas y protegidas
-3. **stockService.test.js**: Valida lógica de gestión de inventario
+🚧 **Pendiente**: aún no se incorporaron tests automatizados (Jest/Supertest) al proyecto. El script `npm test` está sin implementar.
 
 ---
 
@@ -273,8 +249,8 @@ El proyecto está configurado para despliegue en Vercel como Serverless Function
 ```json
 {
   "version": 2,
-  "builds": [{"src": "index.js", "use": "@vercel/node"}],
-  "routes": [{"src": "/(.*)", "dest": "/index.js"}]
+  "builds": [{"src": "app.js", "use": "@vercel/node"}],
+  "routes": [{"src": "/(.*)", "dest": "/app.js"}]
 }
 ```
 
@@ -376,9 +352,9 @@ requireRole(...roles) // Roles específicos personalizados
 - ✅ Facturación completa (clientes y proveedores)
 - ✅ Notas de crédito y débito
 - ✅ Órdenes de pago y presupuestos
+- 🚧 Módulo de finanzas (resumen consolidado) — en desarrollo
 - ✅ Gestión automática de stock
 - ✅ Middleware de errores centralizado
-- ✅ Tests automatizados
 - ✅ Despliegue en Vercel
 - ✅ Documentación completa
 
@@ -478,6 +454,8 @@ El video incluye:
 ## 🐛 Problemas Conocidos y Mejoras Futuras
 
 ### Mejoras Futuras
+- [ ] Completar módulo de finanzas: integrar órdenes de pago, notas de crédito/débito y presupuestos en el resumen consolidado
+- [ ] Incorporar tests automatizados (Jest/Supertest)
 - [ ] Implementar paginación en listados
 - [ ] Agregar búsqueda y filtros avanzados
 - [ ] Generar PDFs de facturas
