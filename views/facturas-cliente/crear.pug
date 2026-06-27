@@ -68,10 +68,10 @@ block contenido
                 option(value="") -- Seleccionar producto --
                 each producto in productos
                   option(value=producto.id data-nombre=producto.nombre data-precio=producto.precio)
-                    | #{producto.id} - #{producto.nombre}
+                    | #{producto.nombre}
             div
-              label(style="font-weight: bold; display: block; margin-bottom: 5px;") Código:
-              input(type="text" name="detalles[codigo][]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Código")
+              label(style="font-weight: bold; display: none; margin-bottom: 5px;") Código:
+              input(type="text" name="detalles[codigo][]" style="display: none; width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Código")
           
           div(style="margin-bottom: 15px;")
             label(style="font-weight: bold; display: block; margin-bottom: 5px;") Descripción:
