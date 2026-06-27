@@ -1,194 +1,507 @@
 # TodoStock S.A. - Sistema de Gestión de Inventario
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-1572B6?style=for-the-badge&logo=express&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![Mongoose](https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-## Proyecto: Desarrollo de Sistemas Web (Back End)
+## 📋 Proyecto: Desarrollo de Sistemas Web (Back End) - Entrega Final
 
-**Tecnicatura Superior en Desarrollo de Software**
-**Instituto de Formación Técnica Superior N° 29 (IFTS 29)**
-
----
-
-## Descripción del Proyecto
-
-Este proyecto es la **Segunda Entrega** de la materia de Desarrollo de Sistemas Web - Back End. Toma como base la primer entrega e incorpora dos mejoras principales: la **migración de la persistencia de archivos JSON a MongoDB** utilizando Mongoose, y la incorporación de un **sistema de autenticación** (registro, login y logout) que protege el acceso al sistema.
-
-La plataforma está diseñada para la distribuidora de productos de limpieza **TodoStock S.A.** y permite gestionar el ciclo de vida de productos, clientes y proveedores, con control de stock y acceso restringido por usuario.
-
+**Tecnicatura Superior en Desarrollo de Software**  
+**Instituto de Formación Técnica Superior N° 29 (IFTS 29)**  
+**Año: 2026 - 1er Cuatrimestre**
 
 ---
 
-## 👥 Integrantes del Equipo y Roles
+## 📖 Descripción del Proyecto
 
-El desarrollo se gestionó dividiendo el trabajo por capas de la arquitectura MVC y por módulos de negocio, consolidando la entrega mediante una revisión colaborativa.
+Este proyecto es la **Entrega Final** de la materia de Desarrollo de Sistemas Web - Back End. Representa la evolución completa desde la primera entrega (persistencia en JSON) hasta un sistema profesional con:
 
-| Integrante / GitHub | Rol y Responsabilidad Principal |
-| :--- | :--- |
-| **Aiello, Mariana**<br>[🔗 Ver Perfil](https://github.com/Aiello-M) | **Desarrollo de Finanzas, Integración de Datos y Documentación de Repositorio**<br>Desarrollo del módulo de Finanzas (consulta cruzada de colecciones de clientes/proveedores) y confección del archivo `README.md`. |
-| **Flores, Miguel Ángel**<br>[🔗 Ver Perfil](https://github.com/mikefink22) | **Desarrollo de Clientes y Verificación de Calidad (QA)**<br>Desarrollo del módulo de Clientes (persistencia asíncrona con validaciones) y ejecución de la demostración funcional en vivo. |
-| **González, Mario**<br>[🔗 Ver Perfil](https://github.com/elavincho) | **Infraestructura y Seguridad**<br>Configuración de la conexión global a MongoDB Atlas, definición de middlewares de protección de rutas y sistema de autenticación de usuarios. |
-| **Rodríguez, Raquel**<br>[🔗 Ver Perfil](https://github.com/raquerh) | **Desarrollo de Productos e Identificadores**<br>Desarrollo del módulo de Productos (persistencia asíncrona con validaciones) y migración de IDs manuales a `ObjectId` nativos. |
-| **Thomas, Valeria**<br>[🔗 Ver Perfil](https://github.com/Irinath) | **Desarrollo de Proveedores e Informe Técnico**<br>Desarrollo del módulo de Proveedores (persistencia asíncrona con validaciones) y redacción del documento PDF de entrega final. |
----
+- ✅ Base de datos MongoDB con Mongoose
+- ✅ Autenticación segura con bcrypt
+- ✅ Sesiones persistentes con express-session + MongoStore
+- ✅ Sistema de roles y autorización (admin, contador, usuario)
+- ✅ Módulos completos de facturación, notas de crédito/débito, órdenes de pago
+- ✅ Gestión automática de stock
+- ✅ Middleware de manejo de errores centralizado
+- ✅ Pruebas automatizadas (Jest)
+- ✅ Despliegue en Vercel
 
-## Novedades respecto a la Primera Entrega
-
-- **Migración a MongoDB:** Los datos ya no se persisten en archivos `.json` locales. Ahora se utiliza **MongoDB** como base de datos en la nube, gestionada con **Mongoose**.
-- **Sistema de autenticación:** Se incorporaron las vistas y la lógica de login, registro y logout. Las rutas protegidas requieren autenticación para ser accedidas.
-- **Nuevas entidades:** Se sumaron los modelos de **Cliente**, **Proveedor** y **Usuario**, cada uno con su schema Mongoose, controlador y rutas correspondientes.
-- **Variables de entorno:** La configuración sensible (URI de MongoDB, puerto) se gestiona mediante un archivo `.env` y la librería `dotenv`.
-- **Programación asincrónica:** Los controladores utilizan `async/await` para todas las operaciones con la base de datos.
-- **Manejo de errores:** Se incorporaron bloques `try/catch` en los controladores con mensajes descriptivos al usuario.
+La plataforma está diseñada para la distribuidora de productos de limpieza **TodoStock S.A.** y permite gestionar de forma integral productos, clientes, proveedores, facturación y finanzas.
 
 ---
 
-## Funcionalidades Principales
+## 🎯 Funcionalidades Principales
 
-- **Autenticación:** Registro de nuevos usuarios, inicio y cierre de sesión. Middleware `isAuthenticated` que redirige al login si no hay sesión activa, y `isGuest` que impide el acceso a login/registro si ya hay una sesión iniciada.
-- **CRUD de Productos:** Creación, listado, edición y eliminación de productos de limpieza con validaciones Mongoose.
-- **CRUD de Clientes:** Gestión de clientes con soporte para tipo de documento (DNI/CUIT), razón social y saldo de cuenta corriente.
-- **CRUD de Proveedores:** Gestión de proveedores con la misma estructura que clientes.
-- **Control de Stock:** Alertas visuales (color rojo) para productos por debajo del stock mínimo.
-- **Validaciones:** Campos obligatorios, formatos de email, rangos numéricos y valores permitidos (enums) definidos en los schemas de Mongoose.
-- **Interfaz Dinámica:** Motor de plantillas **Pug** con layouts reutilizables y estilos CSS personalizados.
+### 🔐 Autenticación y Seguridad
+- Registro de usuarios con validaciones
+- Login con usuario/email + contraseña encriptada (bcrypt)
+- Sesiones persistentes en MongoDB
+- Logout seguro
+- Protección de rutas según autenticación
+- Control de acceso por roles
+
+### 👥 Sistema de Roles
+- **Admin**: Acceso total, gestión de usuarios
+- **Contador**: Acceso a módulos financieros y facturación
+- **Usuario**: Operaciones básicas (productos, clientes, proveedores)
+
+### 📦 Gestión de Inventario
+- CRUD completo de productos
+- Control de stock automático
+- Alertas de stock mínimo
+- Actualización de stock desde facturas
+- Historial de movimientos
+
+### 👤 Gestión de Clientes y Proveedores
+- CRUD completo con validaciones
+- Soporte para DNI y CUIT
+- Manejo de cuentas corrientes
+- Consulta de saldos
+
+### 🧾 Facturación
+- **Facturas a Clientes**: Con descuento automático de stock
+- **Facturas de Proveedores**: Con aumento automático de stock
+- Cálculo automático de IVA (21% y 10.5%)
+- Estados: Pendiente, Pagada, Anulada, Parcial
+- Anulación con reversión de stock
+
+### 💰 Gestión Financiera
+- Órdenes de pago
+- Notas de crédito (devoluciones)
+- Notas de débito (ajustes)
+- Presupuestos
+- Resumen financiero consolidado
+
+### 🛡️ Manejo de Errores
+- Middleware centralizado de errores
+- Páginas de error personalizadas (404, 500)
+- Logging de errores en desarrollo
+- Mensajes de error amigables al usuario
 
 ---
 
-## Tecnologías Utilizadas
+## 🏗️ Arquitectura y Tecnologías
 
-- **Node.js** (Entorno de ejecución)
-- **Express.js v5** (Framework web)
-- **Pug** (Motor de plantillas)
-- **MongoDB Atlas + Mongoose** (Base de datos en la nube y ODM)
-- **dotenv** (Gestión de variables de entorno)
-- **CSS3** (Diseño y estilos)
-- **JavaScript (ES6+)** (Lógica de negocio y POO)
+### Stack Tecnológico
 
----
+| Tecnología | Versión | Uso |
+|------------|---------|-----|
+| **Node.js** | 18+ | Entorno de ejecución |
+| **Express.js** | 5.2.1 | Framework web |
+| **MongoDB** | 4.17.2 | Base de datos |
+| **Mongoose** | 9.6.2 | ODM para MongoDB |
+| **bcryptjs** | 3.0.3 | Encriptación de contraseñas |
+| **express-session** | 1.19.0 | Gestión de sesiones |
+| **connect-mongo** | 4.6.0 | Store de sesiones en MongoDB |
+| **Pug** | 3.0.4 | Motor de plantillas |
+| **dotenv** | 17.4.2 | Variables de entorno |
+| **Jest** | 29.7.0 | Framework de testing |
+| **Supertest** | 6.3.4 | Testing de rutas HTTP |
 
-## Estructura del Proyecto
+### Patrón de Diseño: MVC (Model-View-Controller)
 
 ```
-404Solution_BE1c2026_G1cD/
-├── controllers/
-│   ├── authController.js       # Login, registro, logout y middlewares de auth
-│   ├── clienteController.js
-│   ├── finanzasController.js
-│   ├── homeController.js
+📁 Estructura del Proyecto
+├── 📂 config/              # Configuración de base de datos
+│   └── database.js
+├── 📂 controllers/         # Lógica de negocio (12 controladores)
+│   ├── authController.js
 │   ├── productoController.js
-│   └── proveedorController.js
-├── models/
-│   ├── Cliente.js              # Schema Mongoose de clientes
-│   ├── Producto.js             # Schema Mongoose de productos
-│   ├── Proveedor.js            # Schema Mongoose de proveedores
-│   └── Usuario.js              # Schema Mongoose de usuarios
-├── routes/
+│   ├── clienteController.js
+│   ├── proveedorController.js
+│   ├── facturaClienteController.js
+│   ├── facturaProveedorController.js
+│   ├── ordenPagoController.js
+│   ├── notaDeCreditoController.js
+│   ├── notaDeDebitoController.js
+│   ├── presupuestoController.js
+│   ├── finanzasController.js
+│   └── homeController.js
+├── 📂 models/              # Schemas de Mongoose (10 modelos)
+│   ├── Usuario.js
+│   ├── Producto.js
+│   ├── Cliente.js
+│   ├── Proveedor.js
+│   ├── FacturaCliente.js
+│   ├── FacturaProveedor.js
+│   ├── OrdenPago.js
+│   ├── NotaDeCredito.js
+│   ├── NotaDeDebito.js
+│   └── Presupuesto.js
+├── 📂 routes/              # Definición de endpoints (13 rutas)
 │   ├── authRoutes.js
+│   ├── productoRoutes.js
 │   ├── clienteRoutes.js
+│   ├── proveedorRoutes.js
+│   ├── facturaClienteRoutes.js
+│   ├── facturaProveedorRoutes.js
+│   ├── ordenPagoRoutes.js
+│   ├── notaDeCreditoRoutes.js
+│   ├── notaDeDebitoRoutes.js
+│   ├── presupuestoRoutes.js
 │   ├── finanzasRoutes.js
 │   ├── homeRoutes.js
-│   ├── productoRoutes.js
-│   └── proveedorRoutes.js
-├── views/
-│   ├── auth/
-│   │   ├── login.pug
-│   │   └── register.pug
-│   ├── clientes/
-│   ├── productos/
-│   ├── proveedores/
-│   ├── finanzas/
-│   ├── home/
-│   └── layout.pug
-├── public/                     # Archivos estáticos (CSS, imágenes)
-├── .env                        # Variables de entorno (no incluir en el repo)
-├── app.js                      # Punto de entrada del servidor
-└── package.json
+│   └── adminRoutes.js
+├── 📂 middlewares/         # Middlewares personalizados
+│   ├── auth.js            # Autenticación y autorización
+│   └── errorHandler.js    # Manejo centralizado de errores
+├── 📂 services/            # Lógica de negocio reutilizable
+│   └── stockService.js    # Gestión de inventario
+├── 📂 views/               # Plantillas Pug
+│   ├── layout.pug         # Layout base
+│   ├── error.pug          # Página de error
+│   ├── 📂 auth/
+│   ├── 📂 productos/
+│   ├── 📂 clientes/
+│   ├── 📂 proveedores/
+│   ├── 📂 facturas-cliente/
+│   ├── 📂 facturas-proveedor/
+│   ├── 📂 ordenes-pago/
+│   ├── 📂 notas-credito/
+│   ├── 📂 notas-debito/
+│   ├── 📂 presupuestos/
+│   └── 📂 finanzas/
+├── 📂 public/              # Archivos estáticos
+│   ├── 📂 css/
+│   └── 📂 img/
+├── 📂 tests/               # Pruebas automatizadas
+│   ├── calculosFactura.test.js
+│   ├── routes.test.js
+│   └── stockService.test.js
+├── .env                    # Variables de entorno (no versionado)
+├── .env.example            # Ejemplo de configuración
+├── .gitignore
+├── index.js                # Punto de entrada
+├── package.json
+├── jest.config.js          # Configuración de Jest
+├── vercel.json             # Configuración de despliegue
+└── README.md
 ```
 
 ---
 
-## Instalación y Configuración
+## 🚀 Instalación y Configuración
 
 ### Prerrequisitos
-- **Node.js** (v18 o superior)
+
+- **Node.js** v18 o superior
+- **MongoDB** (local o MongoDB Atlas)
 - **Git**
-- Una cuenta en **MongoDB Atlas** (o un servidor local de MongoDB).
+- **npm** o **yarn**
 
----
-
-### 1. Clonar el repositorio
+### Paso 1: Clonar el repositorio
 
 ```bash
 git clone <url-del-repositorio>
-cd 404Solution_BE1c2026_G1cD
+cd backend_2da_entrega_commonjs_mongo
 ```
 
-### 2. Instalar dependencias
+### Paso 2: Instalar dependencias
 
 ```bash
 npm install
 ```
 
-### 3. Configurar variables de entorno
+### Paso 3: Configurar variables de entorno
 
-Crear un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+Crear un archivo `.env` en la raíz del proyecto (usar `.env.example` como referencia):
 
 ```env
-MONGODB_URI=mongodb+srv://<usuario>:<contraseña>@<cluster>.mongodb.net/<nombre-db>
+# Base de Datos MongoDB
+MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/todostock
+
+# Clave secreta para sesiones (generar una única y segura)
+SESSION_SECRET=tu_clave_secreta_super_segura_cambiar_en_produccion
+
+# Puerto del servidor
 PORT=3000
+
+# Entorno
+NODE_ENV=development
 ```
 
-### 4. Iniciar el servidor
+**⚠️ IMPORTANTE:**
+- Generar una `SESSION_SECRET` única con: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
+- NUNCA subir el archivo `.env` al repositorio
+- Para MongoDB Atlas, crear un usuario con permisos específicos
 
+### Paso 4: Iniciar el servidor
+
+**Modo desarrollo (con nodemon):**
 ```bash
-# Modo desarrollo (con nodemon)
 npm run dev
+```
 
-# Modo producción
+**Modo producción:**
+```bash
 npm start
 ```
 
-El servidor estará disponible en `http://localhost:3000`.
+El servidor estará disponible en `http://localhost:3000`
 
 ---
 
-## Uso Básico
+## 🧪 Ejecución de Pruebas
 
-1. Al ingresar a la ruta principal, el sistema redirigirá automáticamente a la pantalla de Login.
-2. Hacer clic en "Registrarse" para crear un usuario inicial.
-3. Una vez iniciada la sesión, se habilitará el acceso al Dashboard principal y a los módulos de Productos, Clientes, Proveedores y Finanzas.
+El proyecto incluye tests unitarios y de integración con Jest:
 
----
+```bash
+# Ejecutar todas las pruebas
+npm test
 
-## Uso de Inteligencia Artificial
+# Ejecutar pruebas en modo watch
+npm run test:watch
 
-Durante el desarrollo de esta etapa se utilizaron asistentes de Inteligencia Artificial como herramientas de apoyo técnico, limitándose su uso a las siguientes tareas:
+# Ejecutar pruebas con reporte de cobertura
+npm run test:coverage
+```
 
-- Asistencia en la depuración de código (debugging) y resolución de errores asincrónicos.
-- Optimización en la redacción y formato de la documentación técnica y el archivo Readme.
+### Tests Implementados
 
-*Nota: Toda la arquitectura, lógica de negocio y definiciones de base de datos fueron diseñadas, evaluadas e implementadas por el equipo de desarrollo.*
-
----
-
-## Bibliografía
-
-- [Documentación oficial de Node.js](https://nodejs.org/en/docs/)
-- [Documentación oficial de Express.js](https://expressjs.com/)
-- [Documentación oficial de Mongoose](https://mongoosejs.com/docs/)
-- [Documentación oficial de MongoDB Atlas](https://www.mongodb.com/docs/atlas/)
-- [Documentación oficial de Pug](https://pugjs.org/api/getting-started.html)
-- [MDN Web Docs - JavaScript async/await](https://developer.mozilla.org/es/docs/Learn/JavaScript/Asynchronous/Promises)
-- [dotenv - npm](https://www.npmjs.com/package/dotenv)
+1. **calculosFactura.test.js**: Verifica cálculos de IVA y totales
+2. **routes.test.js**: Prueba rutas públicas y protegidas
+3. **stockService.test.js**: Valida lógica de gestión de inventario
 
 ---
 
-## Video Explicativo
+## 🌐 Despliegue en Vercel
 
-> *https://youtu.be/5x6fUrPxQ7k*
+El proyecto está configurado para despliegue en Vercel como Serverless Function:
+
+```json
+{
+  "version": 2,
+  "builds": [{"src": "index.js", "use": "@vercel/node"}],
+  "routes": [{"src": "/(.*)", "dest": "/index.js"}]
+}
+```
+
+### Variables de entorno en Vercel
+
+Configurar en el dashboard de Vercel:
+- `MONGODB_URI`
+- `SESSION_SECRET`
+- `NODE_ENV=production`
 
 ---
 
-*Materia: Desarrollo de Sistemas Web - Back End | IFTS 29 | 2026*
+## 📊 Modelos de Datos
+
+### Usuario
+```javascript
+{
+  username: String (único),
+  email: String (único),
+  password: String (encriptado con bcrypt),
+  nombreCompleto: String,
+  rol: String (enum: 'admin', 'usuario', 'contador'),
+  activo: Boolean,
+  ultimoAcceso: Date
+}
+```
+
+### Producto
+```javascript
+{
+  id: Number,
+  nombre: String,
+  categoria: String,
+  precio: Number,
+  stockActual: Number,
+  stockMinimo: Number
+}
+```
+
+### FacturaCliente
+```javascript
+{
+  numero: String (único),
+  puntoVenta: Number,
+  clienteId: Number,
+  clienteInfo: Object,
+  empresaInfo: Object,
+  fechaEmision: Date,
+  fechaVencimiento: Date,
+  estatus: String (enum: 'Pendiente', 'Pagada', 'Anulada', 'Parcial'),
+  detalles: [Array de productos],
+  subtotalNeto: Number (calculado automáticamente),
+  iva21: Number (calculado automáticamente),
+  iva105: Number (calculado automáticamente),
+  total: Number (calculado automáticamente),
+  stockDescontado: Boolean
+}
+```
+
+---
+
+## 🔒 Sistema de Autorización
+
+| Rol | Permisos |
+|-----|----------|
+| **Admin** | Acceso total + gestión de usuarios |
+| **Contador** | Finanzas, facturación, órdenes de pago, notas de crédito/débito, presupuestos |
+| **Usuario** | Productos, clientes, proveedores (operaciones básicas) |
+
+### Middlewares de Autorización
+
+```javascript
+requireLogin          // Solo usuarios autenticados
+requireAdmin          // Solo administradores
+requireContadorOrAdmin // Contadores y administradores
+requireRole(...roles) // Roles específicos personalizados
+```
+
+---
+
+## 🔄 Evolución del Proyecto
+
+### Versión 1.0 (Primera Entrega)
+- ✅ Node.js + Express
+- ✅ Persistencia en JSON
+- ✅ CRUD de productos
+- ✅ Motor de plantillas Pug
+
+### Versión 1.5 (Segunda Entrega)
+- ✅ Migración a MongoDB + Mongoose
+- ✅ Autenticación básica
+- ✅ CRUD de clientes y proveedores
+- ✅ Módulo de finanzas
+
+### Versión 2.0 (Entrega Final - Actual)
+- ✅ Autenticación segura con bcrypt
+- ✅ Sesiones persistentes
+- ✅ Sistema de roles completo
+- ✅ Facturación completa (clientes y proveedores)
+- ✅ Notas de crédito y débito
+- ✅ Órdenes de pago y presupuestos
+- ✅ Gestión automática de stock
+- ✅ Middleware de errores centralizado
+- ✅ Tests automatizados
+- ✅ Despliegue en Vercel
+- ✅ Documentación completa
+
+---
+
+## 📝 Decisiones Técnicas
+
+### ¿Por qué express-session en vez de JWT?
+
+**Decisión**: Usamos **express-session + connect-mongo** en lugar de JWT.
+
+**Justificación**:
+- ✅ **Simplicidad**: Express-session es más simple de implementar para este alcance
+- ✅ **Seguridad**: Las sesiones se almacenan en el servidor (MongoDB), más difíciles de comprometer
+- ✅ **Revocación**: Podemos invalidar sesiones fácilmente desde el servidor
+- ✅ **Estado**: Ideal para aplicaciones web con vistas del servidor (Pug)
+- ⚠️ **Escalabilidad**: Para APIs REST stateless, JWT sería mejor
+
+### ¿Por qué bcrypt en vez de otros métodos?
+
+- ✅ Algoritmo probado y seguro
+- ✅ Incluye salt automático
+- ✅ Configurable en complejidad
+- ✅ Resistente a ataques de fuerza bruta
+
+### ¿Por qué Mongoose en vez de driver nativo?
+
+- ✅ Schemas y validaciones
+- ✅ Middleware (hooks)
+- ✅ Métodos y virtuals
+- ✅ Queries más legibles
+- ✅ Cálculos automáticos (pre-save hooks)
+
+---
+
+## 👥 Integrantes del Equipo y Roles
+
+| Integrante | Rol Principal | Responsabilidades |
+|------------|---------------|-------------------|
+| **Aiello, Mariana** | Desarrollo de Finanzas + Documentación | Módulo de finanzas, integración de datos, README.md |
+| **Flores, Miguel Ángel** | Desarrollo de Clientes + QA | CRUD de clientes, validaciones, testing y demostración |
+| **González, Mario** | Infraestructura + Seguridad | MongoDB Atlas, autenticación, sesiones, middlewares |
+| **Rodríguez, Raquel** | Desarrollo de Productos + Testing | CRUD de productos, migración de IDs, tests |
+| **Thomas, Valeria** | Desarrollo de Proveedores + Documentación | CRUD de proveedores, documento PDF final |
+
+---
+
+## 📚 Bibliografía y Recursos
+
+### Documentación Oficial
+- [Node.js Documentation](https://nodejs.org/en/docs/)
+- [Express.js Guide](https://expressjs.com/)
+- [MongoDB Manual](https://www.mongodb.com/docs/manual/)
+- [Mongoose Documentation](https://mongoosejs.com/docs/)
+- [Pug Template Engine](https://pugjs.org/api/getting-started.html)
+- [Jest Testing Framework](https://jestjs.io/docs/getting-started)
+
+### Tutoriales y Guías
+- [MDN Web Docs - Async/Await](https://developer.mozilla.org/es/docs/Learn/JavaScript/Asynchronous/Promises)
+- [bcrypt.js - npm](https://www.npmjs.com/package/bcryptjs)
+- [express-session - npm](https://www.npmjs.com/package/express-session)
+- [connect-mongo - npm](https://www.npmjs.com/package/connect-mongo)
+
+### Videos Educativos
+- Curso de Node.js y Express - YouTube
+- Tutorial de MongoDB y Mongoose - YouTube
+- Autenticación con bcrypt y sesiones - YouTube
+
+---
+
+## 🤖 Uso de Inteligencia Artificial
+
+Durante el desarrollo de esta entrega se utilizaron asistentes de IA como herramientas de apoyo técnico en:
+
+- ✅ Depuración de código y resolución de errores
+- ✅ Optimización de queries de Mongoose
+- ✅ Sugerencias de mejores prácticas de seguridad
+- ✅ Formato y estructura de documentación
+
+**Nota**: Toda la arquitectura, lógica de negocio, diseño de base de datos y decisiones técnicas fueron realizadas por el equipo de desarrollo. La IA solo fue usada como asistente en tareas específicas.
+
+---
+
+## 🎥 Video Demostrativo
+
+> **Enlace al video**: [Agregar enlace aquí]
+
+El video incluye:
+- Demostración completa de funcionalidades
+- Explicación de la arquitectura
+- Casos de uso principales
+- Manejo de errores
+- Participación de todos los integrantes
+
+---
+
+## 🐛 Problemas Conocidos y Mejoras Futuras
+
+### Mejoras Futuras
+- [ ] Implementar paginación en listados
+- [ ] Agregar búsqueda y filtros avanzados
+- [ ] Generar PDFs de facturas
+- [ ] Envío de emails automáticos
+- [ ] Dashboard con gráficos estadísticos
+- [ ] API REST para integración externa
+- [ ] Implementación de caché con Redis
+- [ ] Logs centralizados con Winston
+
+---
+
+## 📞 Contacto y Soporte
+
+**Institución**: IFTS 29  
+**Materia**: Desarrollo de Sistemas Web - Back End  
+**Año**: 2026 - 1er Cuatrimestre  
+
+---
+
+## 📄 Licencia
+
+ISC © 2026 TodoStock S.A. - IFTS 29
+
+---
+
+**Última actualización**: Junio 2026  
+**Versión**: 2.0.0
