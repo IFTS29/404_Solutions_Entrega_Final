@@ -98,7 +98,7 @@ block contenido
         }
 
         try {
-          const response = await fetch(`/recibos-cobro/facturas-pendientes/${clienteId}`);
+          const response = await fetch(`/cobranzas/facturas-pendientes/${clienteId}`);
           const data = await response.json();
 
           if (data.success && data.facturas.length > 0) {
