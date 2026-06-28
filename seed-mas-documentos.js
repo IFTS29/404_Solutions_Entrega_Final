@@ -469,3 +469,33 @@ async function seed() {
     await factProv7.save();
     facturasProveedor.push(factProv7);
     console.log('📑 Factura Proveedor 7 (Pagada):', factProv7.numero, '- $' + factProv7.total.toFixed(2));
+
+    // ===================== RESUMEN =====================
+    console.log('\n════════════════════════════════════════');
+    console.log('    RESUMEN - DOCUMENTOS ADICIONALES');
+    console.log('════════════════════════════════════════');
+
+    const totalFactCli = facturasCliente.reduce((sum, f) => sum + f.total, 0);
+    const totalNC = notasCredito.reduce((sum, n) => sum + n.total, 0);
+    const totalND = notasDebito.reduce((sum, n) => sum + n.total, 0);
+    const totalFactProv = facturasProveedor.reduce((sum, f) => sum + f.total, 0);
+
+    console.log('\n📊 Facturas Clientes creadas: ' + facturasCliente.length + ' - Total: $' + totalFactCli.toFixed(2));
+    console.log('➖ Notas de Crédito creadas: ' + notasCredito.length + ' - Total: $' + totalNC.toFixed(2));
+    console.log('➕ Notas de Débito creadas: ' + notasDebito.length + ' - Total: $' + totalND.toFixed(2));
+    console.log('📑 Facturas Proveedores creadas: ' + facturasProveedor.length + ' - Total: $' + totalFactProv.toFixed(2));
+
+    console.log('\n  Cuentas por Cobrar: $' + (totalFactCli - totalNC + totalND).toFixed(2));
+    console.log('  Cuentas por Pagar: $' + totalFactProv.toFixed(2));
+    console.log('════════════════════════════════════════\n');
+
+    await mongoose.disconnect();
+    console.log('✅ Seed completado. Desconectado de MongoDB.');
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+    await mongoose.disconnect();
+    process.exit(1);
+  }
+}
+
+seed();
