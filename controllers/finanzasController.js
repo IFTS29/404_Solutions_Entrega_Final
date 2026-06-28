@@ -657,7 +657,7 @@ const finanzasController = {
       cliente.saldoCuentaCorriente = saldoActual - montoFinal;
       await cliente.save();
 
-      res.redirect(`/cobranzas/ver/${recibo.numero}`);
+      res.redirect(`/recibos-cobro/ver/${recibo.numero}`);
     } catch (error) {
       console.error(error);
       try {
