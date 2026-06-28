@@ -1,0 +1,43 @@
+extends ../layout
+
+block contenido
+  a.btn-volver(href='/clientes') Volver
+  
+  h1= titulo
+  
+  div.acciones-header
+    a.btn-nuevo(href="/cobranzas/nuevo") + Nueva Cobranza
+  
+  if cobranzas && cobranzas.length > 0
+    table
+      thead
+        tr
+          th N° Cobranza
+          th Cliente
+          th Fecha Emisión
+          th Monto
+          th Estatus
+          th Acciones
+      tbody
+        each cobranza in cobranzas
+          tr(class=cobranza.estatus === 'Anulado' ? 'estatus-anulado' : (cobranza.estatus === 'Cobrado' ? 'estatus-pagado' : 'estatus-pendiente'))
+            td= cobranza.numero
+            td= cobranza.clienteInfo.nombre
+            td= cobranza.fechaEmision.toLocaleDateString('es-AR')
+            td $ #{cobranza.montoACobrar.toLocaleString('es-AR', {minimumFractionDigits: 2})}
+            td
+              span(class=`badge badge-${cobranza.estatus.toLowerCase()}`)= cobranza.estatus
+            td
+              div.acciones-container
+                a(href=`/cobranzas/ver/${cobranza.numero}`) Ver
+                if cobranza.estatus !== 'Anulado' && cobranza.estatus !== 'Cobrado'
+                  form(action=`/cobranzas/anular/${cobranza.numero}` method="POST" style="display: inline;")
+                    button(type="submit" onclick="return confirm('¿Anular esta cobranza?')") Anular
+                if cobranza.estatus !== 'Cobrado' && cobranza.estatus !== 'Anulado'
+                  form(action=`/cobranzas/cambiar-estatus/${cobranza.numero}` method="POST" style="display: inline;")
+                    input(type="hidden" name="estatus" value="Cobrado")
+                    button(type="submit" onclick="return confirm('¿Marcar como cobrada?')" style="background-color: #28a745;") Cobrar
+                form(action=`/cobranzas/eliminar/${cobranza.numero}` method="POST" style="display: inline;")
+                  button(type="submit" onclick="return confirm('¿Eliminar esta cobranza?')" style="background-color: #dc3545;") Eliminar
+  else
+    p No hay cobranzas registradas.
