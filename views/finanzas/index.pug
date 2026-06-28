@@ -49,34 +49,45 @@ block contenido
                 p.stat-detalle Vigentes
             a.stat-link(href='/presupuestos') Ver todos →
 
-    //- Accesos rápidos
+    //- Accesos rápidos organizados por categoría
     .accesos-rapidos
         h2 🔗 Accesos Rápidos
-        .grid-accesos
-            a.boton-acceso(href='/finanzas/cuentas-cobrar')
-                span.icono 💵
-                span.texto Cuentas por Cobrar
-            a.boton-acceso(href='/finanzas/cuentas-pagar')
-                span.icono 💳
-                span.texto Cuentas por Pagar
-            a.boton-acceso(href='/facturas-cliente')
-                span.icono 🧾
-                span.texto Facturas Clientes
-            a.boton-acceso(href='/facturas-proveedor')
-                span.icono 📑
-                span.texto Facturas Proveedores
-            a.boton-acceso(href='/ordenes-pago')
-                span.icono 💰
-                span.texto Órdenes de Pago
-            a.boton-acceso(href='/notas-credito')
-                span.icono ➖
-                span.texto Notas de Crédito
-            a.boton-acceso(href='/notas-debito')
-                span.icono ➕
-                span.texto Notas de Débito
-            a.boton-acceso(href='/presupuestos')
-                span.icono 📊
-                span.texto Presupuestos
+        
+        .seccion-accesos
+            h3.seccion-titulo 👤 Clientes
+            .grid-accesos
+                a.boton-acceso(href='/facturas-cliente')
+                    span.icono 🧾
+                    span.texto Facturas Clientes
+                a.boton-acceso(href='/notas-credito')
+                    span.icono ➖
+                    span.texto Notas de Crédito
+                a.boton-acceso(href='/notas-debito')
+                    span.icono ➕
+                    span.texto Notas de Débito
+                a.boton-acceso(href='/presupuestos')
+                    span.icono 📊
+                    span.texto Presupuestos
+        
+        .seccion-accesos
+            h3.seccion-titulo 🏭 Proveedores
+            .grid-accesos
+                a.boton-acceso(href='/facturas-proveedor')
+                    span.icono 📑
+                    span.texto Facturas Proveedores
+                a.boton-acceso(href='/ordenes-pago')
+                    span.icono 💰
+                    span.texto Órdenes de Pago
+        
+        .seccion-accesos
+            h3.seccion-titulo 📊 Resúmenes
+            .grid-accesos
+                a.boton-acceso(href='/finanzas/cuentas-cobrar')
+                    span.icono 💵
+                    span.texto Cuentas por Cobrar
+                a.boton-acceso(href='/finanzas/cuentas-pagar')
+                    span.icono 💳
+                    span.texto Cuentas por Pagar
 
     //- Últimos movimientos
     .ultimos-movimientos
@@ -96,11 +107,21 @@ block contenido
                 tbody
                     each mov in ultimosMovimientos
                         tr
-                            td= mov.tipo
+                            td
+                                if mov.tipo === 'Nota de Crédito'
+                                    span(style="color: #dc3545;") #{mov.tipo}
+                                else if mov.tipo === 'Nota de Débito'
+                                    span(style="color: #28a745;") #{mov.tipo}
+                                else
+                                    span= mov.tipo
                             td= mov.numero
                             td= mov.entidad
                             td= new Date(mov.fecha).toLocaleDateString('es-AR')
-                            td.monto $ #{mov.monto.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                            td.monto
+                                if mov.tipo === 'Nota de Crédito'
+                                    span(style="color: #dc3545;") -$ #{mov.monto.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                                else
+                                    | $ #{mov.monto.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                             td
                                 span.badge(class=`badge-${mov.estatus.toLowerCase()}`)= mov.estatus
                             td
