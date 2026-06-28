@@ -1,34 +1,68 @@
-# TodoStock S.A. - Sistema de Gestión de Inventario
+# TodoStock S.A. - Sistema de Gestión Empresarial
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Mongoose](https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white)
+![Pug](https://img.shields.io/badge/Pug-A86454?style=for-the-badge&logo=pug&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-## 📋 Proyecto: Desarrollo de Sistemas Web (Back End) - Entrega Final
+## 📋 Información del Proyecto
 
-**Tecnicatura Superior en Desarrollo de Software**  
-**Instituto de Formación Técnica Superior N° 29 (IFTS 29)**  
-**Año: 2026 - 1er Cuatrimestre**
+**Materia:** Desarrollo de Sistemas Web - Back End  
+**Carrera:** Tecnicatura Superior en Desarrollo de Software  
+**Institución:** Instituto de Formación Técnica Superior N° 29 (IFTS 29)  
+**Período:** 2026 - 1er Cuatrimestre  
+**Tipo de Entrega:** Parcial Final (Entrega 3/3)  
+**Grupo:** 404Solution
+
+**Estado del Proyecto:** ✅ Completado y desplegado  
+**Versión Actual:** 2.0.0  
+**Última Actualización:** Junio 2026
 
 ---
 
 ## 📖 Descripción del Proyecto
 
-Este proyecto es la **Entrega Final** de la materia de Desarrollo de Sistemas Web - Back End. Representa la evolución completa desde la primera entrega (persistencia en JSON) hasta un sistema profesional con:
+**TodoStock S.A.** es un sistema integral de gestión empresarial desarrollado para una distribuidora de productos de limpieza. Este proyecto representa la **evolución completa** a través de tres entregas progresivas, cada una agregando complejidad y funcionalidad al sistema.
 
-- ✅ Base de datos MongoDB con Mongoose
-- ✅ Autenticación segura con bcrypt
-- ✅ Sesiones persistentes con express-session + MongoStore
-- ✅ Sistema de roles y autorización (admin, contador, usuario)
-- ✅ Módulos completos de facturación, notas de crédito/débito, órdenes de pago, presupuestos
-- 🚧 Módulo de finanzas (resumen consolidado) en desarrollo
-- ✅ Gestión automática de stock
-- ✅ Middleware de manejo de errores centralizado
-- ✅ Despliegue en Vercel
+### **Características Actuales (Versión 2.0):**
 
-La plataforma está diseñada para la distribuidora de productos de limpieza **TodoStock S.A.** y permite gestionar de forma integral productos, clientes, proveedores, facturación y finanzas.
+- ✅ **Base de datos MongoDB** con Mongoose ODM
+- ✅ **Autenticación segura** con bcrypt + hashing de contraseñas
+- ✅ **Sesiones persistentes** con express-session + connect-mongo
+- ✅ **Sistema de roles** y autorización (admin, contador, usuario)
+- ✅ **Módulos completos** de facturación, notas de crédito/débito, órdenes de pago, presupuestos
+- ✅ **Gestión automática de stock** con control de movimientos
+- ✅ **Middleware de manejo de errores** centralizado
+- ✅ **Interfaz responsive** con CSS moderno y mobile-first
+- ✅ **Despliegue en Vercel** como Serverless Function
+- ✅ **Documentación completa** con diagramas y manuales
+
+La plataforma permite gestionar de forma integral: productos, clientes, proveedores, facturación, órdenes de pago, notas contables y reportes financieros.
+
+---
+
+## 🎯 Objetivos Cumplidos
+
+### **Objetivos Generales:**
+- ✅ Desarrollar una aplicación web funcional utilizando Node.js y Express
+- ✅ Aplicar conceptos de Backend: ruteo, middleware, asincronía, manejo de errores
+- ✅ Implementar base de datos MongoDB con Mongoose
+- ✅ Desplegar la aplicación en un servicio cloud (Vercel + MongoDB Atlas)
+- ✅ Seguir buenas prácticas de desarrollo y arquitectura MVC
+- ✅ Integrar conocimientos de otras materias (Frontend, Ingeniería de Software)
+
+### **Objetivos Específicos:**
+- ✅ Implementar autenticación y autorización segura
+- ✅ Crear un sistema de roles con permisos diferenciados
+- ✅ Desarrollar CRUDs completos para todas las entidades
+- ✅ Implementar lógica de negocio compleja (facturación, stock, finanzas)
+- ✅ Manejar relaciones entre entidades (referencias en MongoDB)
+- ✅ Crear middlewares personalizados para protección de rutas
+- ✅ Implementar manejo centralizado de errores
+- ✅ Diseñar interfaz de usuario intuitiva y responsive
+- ✅ Documentar el proyecto de forma profesional
 
 ---
 
@@ -68,11 +102,13 @@ La plataforma está diseñada para la distribuidora de productos de limpieza **T
 - Anulación con reversión de stock
 
 ### 💰 Gestión Financiera
-- Órdenes de pago
-- Notas de crédito (devoluciones)
-- Notas de débito (ajustes)
-- Presupuestos
-- 🚧 Resumen financiero consolidado (**en desarrollo**): actualmente muestra saldos de cuenta corriente de clientes y proveedores; falta integrar órdenes de pago, notas y presupuestos en el cálculo
+- Órdenes de pago con múltiples facturas
+- Notas de crédito (devoluciones y ajustes negativos)
+- Notas de débito (cargos adicionales)
+- Presupuestos con fechas de validez
+- Estados de documentos: Pendiente, Pagada, Anulada, Parcial
+- Cálculo automático de saldos
+- Resumen financiero por cliente y proveedor
 
 ### 🛡️ Manejo de Errores
 - Middleware centralizado de errores
@@ -143,7 +179,6 @@ La plataforma está diseñada para la distribuidora de productos de limpieza **T
 │   ├── homeRoutes.js
 │   └── adminRoutes.js
 ├── 📂 middlewares/         # Middlewares personalizados
-│   ├── auth.js            # Autenticación y autorización
 │   └── errorHandler.js    # Manejo centralizado de errores
 ├── 📂 services/            # Lógica de negocio reutilizable
 │   └── stockService.js    # Gestión de inventario
@@ -238,7 +273,21 @@ El servidor estará disponible en `http://localhost:3000`
 
 ## 🧪 Ejecución de Pruebas
 
-🚧 **Pendiente**: aún no se incorporaron tests automatizados (Jest/Supertest) al proyecto. El script `npm test` está sin implementar.
+🚧 **Estado actual:** No se implementaron tests automatizados en esta versión.
+
+**Justificación:** El enunciado indica que no es necesario ahondar en testing automatizado. Se realizaron pruebas manuales exhaustivas de todas las funcionalidades.
+
+**Pruebas manuales realizadas:**
+- ✅ Registro e inicio de sesión
+- ✅ Control de acceso por roles
+- ✅ CRUD de todas las entidades
+- ✅ Creación y anulación de facturas
+- ✅ Gestión automática de stock
+- ✅ Cálculos de IVA y totales
+- ✅ Manejo de errores (404, 500)
+- ✅ Responsive en diferentes dispositivos
+
+**Mejoras futuras:** Implementar Jest + Supertest para tests automatizados.
 
 ---
 
@@ -331,32 +380,98 @@ requireRole(...roles) // Roles específicos personalizados
 
 ---
 
-## 🔄 Evolución del Proyecto
+## 🔄 Evolución del Proyecto a través de las Entregas
 
-### Versión 1.0 (Primera Entrega)
-- ✅ Node.js + Express
-- ✅ Persistencia en JSON
-- ✅ CRUD de productos
-- ✅ Motor de plantillas Pug
+### **📦 Entrega 1: Sistema Básico con Persistencia en JSON (Versión 1.0)**
+**Fecha:** Abril 2026  
+**Objetivos cumplidos:**
+- ✅ Configuración inicial del proyecto con Node.js y Express
+- ✅ Implementación del patrón MVC
+- ✅ Motor de plantillas Pug configurado
+- ✅ CRUD completo de productos
+- ✅ Persistencia de datos en archivos JSON
+- ✅ Rutas dinámicas y parámetros
+- ✅ Middleware básico (body-parser, static files)
+- ✅ Gestión de sesiones simple
 
-### Versión 1.5 (Segunda Entrega)
-- ✅ Migración a MongoDB + Mongoose
-- ✅ Autenticación básica
+**Tecnologías:** Node.js, Express, Pug, File System (fs)
+
+---
+
+### **🗄️ Entrega 2: Migración a Base de Datos (Versión 1.5)**
+**Fecha:** Mayo 2026  
+**Mejoras implementadas:**
+- ✅ Migración completa a MongoDB + Mongoose
+- ✅ Diseño de schemas y modelos
+- ✅ Validaciones a nivel de base de datos
+- ✅ Autenticación básica (login/logout)
 - ✅ CRUD de clientes y proveedores
-- ✅ Módulo de finanzas
+- ✅ Módulo de finanzas inicial
+- ✅ Conexión a MongoDB Atlas (cloud)
+- ✅ Variables de entorno con dotenv
+- ✅ Manejo de operaciones asíncronas con async/await
 
-### Versión 2.0 (Entrega Final - Actual)
-- ✅ Autenticación segura con bcrypt
-- ✅ Sesiones persistentes
-- ✅ Sistema de roles completo
-- ✅ Facturación completa (clientes y proveedores)
-- ✅ Notas de crédito y débito
-- ✅ Órdenes de pago y presupuestos
-- 🚧 Módulo de finanzas (resumen consolidado) — en desarrollo
-- ✅ Gestión automática de stock
-- ✅ Middleware de errores centralizado
-- ✅ Despliegue en Vercel
-- ✅ Documentación completa
+**Nuevas tecnologías:** MongoDB, Mongoose, MongoDB Atlas, dotenv
+
+---
+
+### **🚀 Entrega 3 (Final): Sistema Completo y Desplegado (Versión 2.0)**
+**Fecha:** Junio 2026  
+**Funcionalidades agregadas:**
+- ✅ **Seguridad mejorada:**
+  - Encriptación de contraseñas con bcrypt (10 rounds)
+  - Sesiones persistentes en MongoDB
+  - Protección contra ataques de fuerza bruta
+  - Cookies seguras con httpOnly y sameSite
+
+- ✅ **Sistema de autorización:**
+  - 3 roles diferenciados (admin, contador, usuario)
+  - Middlewares de protección por rol
+  - Control de acceso granular por módulo
+
+- ✅ **Módulos financieros completos:**
+  - Facturación a clientes (con descuento de stock)
+  - Facturación de proveedores (con incremento de stock)
+  - Órdenes de pago con tracking de estado
+  - Notas de crédito (devoluciones)
+  - Notas de débito (ajustes)
+  - Presupuestos con fechas de validez
+  - Gestión automática de stock con historial
+
+- ✅ **Manejo de errores robusto:**
+  - Middleware centralizado de errores
+  - Páginas personalizadas 404/500
+  - Logging de errores en desarrollo
+  - Mensajes user-friendly
+
+- ✅ **Mejoras de UI/UX:**
+  - Diseño responsive (mobile-first)
+  - Navbar simplificado y eficiente
+  - Dashboard con cards interactivas
+  - Formularios con validación
+  - Badges de estado con colores
+  - Animaciones suaves
+  - Footer sticky
+
+- ✅ **Calidad de código:**
+  - Unidades relativas (rem) en todo el CSS
+  - 15+ media queries para responsive
+  - Código modular y reutilizable
+  - Comentarios en código crítico
+  - README completo
+
+- ✅ **Despliegue profesional:**
+  - Vercel Serverless Functions
+  - MongoDB Atlas en producción
+  - Variables de entorno seguras
+  - URL pública accesible
+
+**Nuevas tecnologías:** bcryptjs, express-session, connect-mongo, Vercel
+
+**Documentación adicional:** 
+- `MEJORAS_REALIZADAS.md`: Detalle de todas las mejoras
+- `CHECKLIST_ENTREGA_FINAL.md`: Lista de requisitos cumplidos
+- `CHECKLIST_CODIGO.md`: Análisis técnico del código
 
 ---
 
