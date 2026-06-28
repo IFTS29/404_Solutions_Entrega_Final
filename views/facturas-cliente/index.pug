@@ -32,10 +32,10 @@ block contenido
                 a(href=`/facturas-cliente/ver/${factura._id}` style="padding: 5px 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 3px;") Ver
                 if factura.estatus !== 'Anulada' && factura.estatus !== 'Pagada'
                   form(action=`/facturas-cliente/anular/${factura._id}` method="POST" style="display: inline;")
-                    button(type="submit" onclick="return confirm('¿Anular esta factura?')" style="padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 3px; cursor: pointer;") Anular
+                    //- button(type="submit" onclick="return confirm('¿Anular esta factura?')" style="padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 3px; cursor: pointer;") Anular
                 if factura.estatus !== 'Pagada' && factura.estatus !== 'Anulada'
                   form(action=`/facturas-cliente/marcar-pagada/${factura._id}` method="POST" style="display: inline;")
-                    button(type="submit" onclick="return confirm('¿Marcar como cobrada?')" style="padding: 5px 10px; background-color: #28a745; color: white; border: none; border-radius: 3px; cursor: pointer;") Cobrar
+                    //- button(type="submit" onclick="return confirm('¿Marcar como cobrada?')" style="padding: 5px 10px; background-color: #28a745; color: white; border: none; border-radius: 3px; cursor: pointer;") Cobrar
                 form(action=`/facturas-cliente/eliminar/${factura._id}` method="POST" style="display: inline;")
                   button(type="submit" onclick="return confirm('¿Eliminar esta factura?')" style="padding: 5px 10px; background-color: #6c757d; color: white; border: none; border-radius: 3px; cursor: pointer;") Eliminar
   else

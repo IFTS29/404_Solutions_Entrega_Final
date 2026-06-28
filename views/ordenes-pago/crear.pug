@@ -17,7 +17,8 @@ block contenido
         select(name="proveedorId" id="proveedorId" required)
           option(value="") Seleccione un proveedor
           each proveedor in proveedores
-            option(value=proveedor.id selected=(datos && datos.proveedorId == proveedor.id))
+            - const provIdStr = proveedor._id.toString()
+            option(value=provIdStr selected=(preselectedProveedorId && preselectedProveedorId === provIdStr) || (datos && datos.proveedorId === provIdStr))
               | #{proveedor.tipoDoc === 'DNI' ? proveedor.nombre : proveedor.razonSocial} - #{proveedor.nroDoc}
 
       // Botón para cargar facturas
