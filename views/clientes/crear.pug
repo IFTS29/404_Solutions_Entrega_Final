@@ -1,6 +1,8 @@
 extends ../layout
 
 block contenido
+    a.btn-volver(href='/clientes/listar') Volver
+
     h1 Registrar Nuevo Cliente
 
     if error
@@ -37,9 +39,9 @@ block contenido
             label(for="direccion") Dirección:
             input(type="text" id="direccion" name="direccion" value=datos ? datos.direccion : '' placeholder="Ej: Av. Colón 123, Córdoba")
 
-        div
-            label(for="saldoCuentaCorriente") Saldo de Cuenta Corriente Inicial ($):
-            input(type="number" id="saldoCuentaCorriente" name="saldoCuentaCorriente" step="0.01" value=datos ? datos.saldoCuentaCorriente : '0')
+        //- div
+        //-     label(for="saldoCuentaCorriente") Saldo de Cuenta Corriente Inicial ($):
+        //-     input(type="number" id="saldoCuentaCorriente" name="saldoCuentaCorriente" step="0.01" value=datos ? datos.saldoCuentaCorriente : '0')
 
         div.form-actions
             button(type="submit").btn-guardar Registrar Cliente

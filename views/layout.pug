@@ -1,27 +1,69 @@
+//- doctype html
+//- doctype html
+//- html(lang="es")
+//-   head
+//-     meta(charset="UTF-8")
+//-     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+//-     title= titulo
+//-     link(rel="stylesheet", href="/css/styles.css")
+  
+//-   body
+//-     if usuario
+//-       header
+//-         nav
+//-           ul
+//-             li: a(href="/") Home
+//-             li: a(href="/productos") Productos
+//-             li: a(href="/clientes") Clientes
+//-             li: a(href="/proveedores") Proveedores
+//-             li: a(href="/finanzas") Finanzas
+//-             li: a(href="/logout") Salir
+//-     else
+//-       header
+//-         nav
+//-           ul
+//-             li: a(href="/login") Iniciar Sesión
+//-             li: a(href="/register") Registrarse
+    
+//-     main
+//-       block contenido
+    
+//-     footer
+//-       p &copy; 2026 TodoStock S.A. - Todos los derechos reservados
+
 doctype html
-html(lang="es")
+html
   head
     meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title= titulo
-    link(rel="stylesheet", href="/css/styles.css")
-    style
-      include ../public/css/styles.css
-  
+    link(rel="stylesheet" href="/css/styles.css")
+
   body
     if usuario
       header
         nav
           ul
-            li: a(href="/") Home
+            li: a(href="/dashboard") Dashboard
             li: a(href="/productos") Productos
             li: a(href="/clientes") Clientes
             li: a(href="/proveedores") Proveedores
             li: a(href="/finanzas") Finanzas
-            li: a(href="/logout") Salir
-    
+            li.user-info-container
+              .user-info-text
+                span.username-nav #{usuario.username}
+                span.badge-rol #{usuario.rol}
+              a.logout-link(href="/logout") Cerrar Sesión
+    else
+      header
+        nav
+          ul
+            li: a(href="/login") Iniciar Sesión
+            li: a(href="/register") Registrarse
+
     main
       block contenido
-    
+
     footer
-      p &copy; 2026 TodoStock S.A. - Todos los derechos reservados
+      p &copy; 2026 TodoStock S.A. - Sistema de Gestión Empresarial
+      p.footer-small Desarrollado por Grupo 404Solution - IFTS 29

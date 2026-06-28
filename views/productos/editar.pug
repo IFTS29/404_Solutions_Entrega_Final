@@ -1,6 +1,8 @@
 extends ../layout
 
 block contenido
+    a.btn-volver(href='/productos') Volver
+    
     h1 Editar Producto: #{producto.nombre}
 
     form(action=`/productos/editar/${producto._id}` method="POST")

@@ -1,17 +1,62 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const app = express();
 const path = require('path');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const connectDB = require('./config/database');
+const { notFound, errorHandler } = require('./middlewares/errorHandler');
 require('dotenv').config();
 
-const app = express();
 
-// Middleware para pasar el usuario a todas las vistas
-const { getUsuarioActual } = require('./controllers/authController');
+const homeRoutes = require("./routes/homeRoutes");
+const rutasProductos = require("./routes/productoRoutes");
+const clienteRoutes = require("./routes/clienteRoutes");
+const proveedorRoutes = require("./routes/proveedorRoutes");
+const finanzasRoutes = require("./routes/finanzasRoutes");
+const ordenPagoRoutes = require("./routes/ordenPagoRoutes");
+const facturaProveedorRoutes = require("./routes/facturaProveedorRoutes");
+const authRoutes = require("./routes/authRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const facturaClienteRoutes = require("./routes/facturaClienteRoutes");
+const notaDeDebitoRoutes = require("./routes/notaDeDebitoRoutes");
+const notaDeCreditoRoutes = require("./routes/notaDeCreditoRoutes");
+const presupuestoRoutes = require("./routes/presupuestoRoutes");
 
+// Conectar a MongoDB
+connectDB();
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'mi_secreto_super_seguro_2024',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    ttl: 24 * 60 * 60
+  }),
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax'
+  },
+  proxy: true,
+  trustProxy: 1
+}));
+
+
+// Middleware para pasar usuario a todas las vistas
 app.use((req, res, next) => {
-  res.locals.usuario = getUsuarioActual();
+  res.locals.usuario = req.session?.usuario || null;
   next();
 });
+
+// Middleware para proteger rutas
+const requireLogin = (req, res, next) => {
+  if (!req.session?.usuario) {
+    return res.redirect('/login');
+  }
+  next();
+};
 
 // Configuración de vistas
 app.set('view engine', 'pug');
@@ -22,20 +67,52 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Conexión a MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB conectado correctamente'))
-  .catch(err => console.error('Error conectando a MongoDB:', err));
+// Uso de las rutas - Rutas públicas
+app.use("/", authRoutes);
 
-// Rutas
-app.use('/', require('./routes/homeRoutes'));
-app.use('/', require('./routes/authRoutes'));
-app.use('/productos', require('./routes/productoRoutes'));
-app.use('/clientes', require('./routes/clienteRoutes'));
-app.use('/proveedores', require('./routes/proveedorRoutes'));
-app.use('/finanzas', require('./routes/finanzasRoutes'));
+// Rutas protegidas (requieren login)
+app.use("/dashboard", requireLogin, authRoutes);
+app.use("/home", requireLogin, homeRoutes);
+app.use("/productos", requireLogin, rutasProductos);
+app.use("/clientes", requireLogin, clienteRoutes);
+app.use("/proveedores", requireLogin, proveedorRoutes);
+app.use("/finanzas", requireLogin, finanzasRoutes);
+app.use("/ordenes-pago", requireLogin, ordenPagoRoutes);
+app.use("/facturas-proveedor", requireLogin, facturaProveedorRoutes);
+app.use("/admin", requireLogin, adminRoutes);
+app.use("/facturas-cliente", requireLogin, facturaClienteRoutes);
+app.use("/notas-debito", requireLogin, notaDeDebitoRoutes);
+app.use("/notas-credito", requireLogin, notaDeCreditoRoutes);
+app.use("/presupuestos", requireLogin, presupuestoRoutes);
+
+// Redireccionar raíz a login o dashboard
+app.get("/", (req, res) => {
+  if (req.session?.usuario) {
+    res.redirect('/dashboard');
+  } else {
+    res.redirect('/login');
+  }
+});
+
+// Middleware de manejo de errores (DEBE IR AL FINAL)
+app.use(notFound);
+app.use(errorHandler);
+
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//   console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// });   --> reemplazado en siguiente linea 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+
+// Para desarrollo local
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  });
+}
+
+// module.exports = { requireLogin };
+
+// Exportar para Vercel (Serverless Function)
+module.exports = app;

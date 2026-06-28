@@ -1,9 +1,11 @@
 extends ../layout
 
 block contenido
+    a.btn-volver(href='/clientes') Volver
+    
     h1 Listado de Clientes
 
-    div(style='text-align: right; margin-bottom: 15px;')
+    div.btn-container-right
         a.btn-nuevo(href='/clientes/nuevo') + Registrar Cliente
     
     if clientes.length > 0
@@ -26,7 +28,7 @@ block contenido
                             div.acciones-container 
                                 a(href=`/clientes/editar/${prod._id}`) Editar
 
-                                form(action=`/clientes/eliminar/${prod._id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este cliente?')")
+                                form.inline-form(action=`/clientes/eliminar/${prod._id}` method="POST" onsubmit="return confirm('¿Está seguro que desea eliminar este cliente?')")
                                     button.btn-accion.btn-borrar(type="submit") Eliminar
     else
         p No hay clientes registrados en el sistema.

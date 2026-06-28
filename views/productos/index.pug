@@ -1,10 +1,12 @@
 extends ../layout
 
 block contenido
+    a.btn-volver(href='/dashboard') Volver
+    
     h1 Stock Actual de Productos
 
-    div(style='text-align: right; margin-bottom: 15px;')
-            a.btn-nuevo(href='/productos/nuevo') + Registrar Producto
+    div.btn-container-right
+        a.btn-nuevo(href='/productos/nuevo') + Registrar Producto
 
     if productos.length > 0
         table
@@ -21,18 +23,18 @@ block contenido
                     tr
                         td= prod.nombre
                         td= prod.categoria
-                        td(style="text-align: right;") $ #{prod.precio}
-                        td(style="text-align: center;")= prod.stockActual
+                        td.text-right $ #{prod.precio}
+                        td.text-center= prod.stockActual
                         td
                             if prod.stockActual <= prod.stockMinimo
-                                span(style="color: red; font-weight: bold; display:flex; text-align: center;") STOCK BAJO
+                                span.badge-stock-bajo STOCK BAJO
                             else
-                                span(style="color: green; font-weight: bold; display:flex; text-align: center;") STOCK OK
+                                span.badge-stock-ok STOCK OK
                         td
                             div.acciones-container 
                                 a(href=`/productos/editar/${prod._id}`) Editar
 
-                                form(action=`/productos/eliminar/${prod._id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este producto?')")
+                                form.inline-form(action=`/productos/eliminar/${prod._id}` method="POST" onsubmit="return confirm('¿Está seguro que desea eliminar este producto?')")
                                     button.btn-accion.btn-borrar(type="submit") Eliminar
                 else
                     p No hay productos registrados en el sistema.
