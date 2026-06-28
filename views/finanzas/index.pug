@@ -1,75 +1,109 @@
 extends ../layout
 
 block contenido
-    a.btn-volver(href='/dashboard') Volver
+    a.btn-volver(href='/dashboard') ← Volver
     
-    h1 Resumen Financiero
+    h1 📊 Resumen Financiero
     
-    // Función para asegurar número en Pug
-    mixin formatNumber(value)
-        - let num = parseFloat(value);
-        - if (isNaN(num)) num = 0;
-        = num.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    if error
+        p.error= error
     
-    div(style="display: flex; gap: 15px; margin-bottom: 25px;")
-        div(style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; text-align: center; background-color: #fff;")
-            h3(style="font-size: 0.9rem; color: #555; margin-bottom: 5px;") A Cobrar (Activo)
-            p(style="font-size: 1.1rem;")
-                span(style="color: #333;") $ 
-                span(style="color: green;")
-                    - let cobrar = parseFloat(totalCobrar);
-                    - if (isNaN(cobrar)) cobrar = 0;
-                    = cobrar.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    //- Tarjetas de estadísticas principales
+    .dashboard-finanzas
+        .tarjeta-stat.stat-cobrar
+            .stat-icono 💰
+            .stat-contenido
+                h3 A Cobrar
+                p.stat-numero $ #{estadisticas.totalPorCobrar.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                p.stat-detalle #{estadisticas.facturasClientesPendientes} facturas pendientes
+            a.stat-link(href='/finanzas/cuentas-cobrar') Ver detalles →
         
-        div(style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; text-align: center; background-color: #fff;")
-            h3(style="font-size: 0.9rem; color: #555; margin-bottom: 5px;") A Pagar (Pasivo)
-            p(style="font-size: 1.1rem;")
-                span(style="color: #333;") $ 
-                span(style="color: #cc0000;")
-                    - let pagar = parseFloat(totalPagar);
-                    - if (isNaN(pagar)) pagar = 0;
-                    = pagar.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})
-            
-        div(style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; text-align: center; background-color: #f9f9f9;")
-            h3(style="font-size: 0.9rem; color: #333; margin-bottom: 5px;") Balance Neto
-            p(style="font-size: 1.1rem;")
-                span(style="color: #333;") $ 
-                - let balance = parseFloat(balanceNeto);
-                - if (isNaN(balance)) balance = 0;
-                span(style=`color: ${balance > 0 ? 'green' : (balance < 0 ? '#cc0000' : '#333')}`)
-                    = balance.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+        .tarjeta-stat.stat-pagar
+            .stat-icono 💸
+            .stat-contenido
+                h3 A Pagar
+                p.stat-numero $ #{estadisticas.totalPorPagar.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                p.stat-detalle #{estadisticas.facturasProveedoresPendientes} facturas pendientes
+            a.stat-link(href='/finanzas/cuentas-pagar') Ver detalles →
+        
+        .tarjeta-stat.stat-balance(class=estadisticas.balanceNeto >= 0 ? 'positivo' : 'negativo')
+            .stat-icono 📈
+            .stat-contenido
+                h3 Balance Neto
+                p.stat-numero $ #{estadisticas.balanceNeto.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                p.stat-detalle= estadisticas.balanceNeto >= 0 ? 'Superávit' : 'Déficit'
+        
+        .tarjeta-stat.stat-ordenes
+            .stat-icono 📋
+            .stat-contenido
+                h3 Órdenes de Pago
+                p.stat-numero #{estadisticas.ordenesPagoPendientes}
+                p.stat-detalle Pendientes de pago
+            a.stat-link(href='/ordenes-pago') Ver todas →
+        
+        .tarjeta-stat.stat-presupuestos
+            .stat-icono 📄
+            .stat-contenido
+                h3 Presupuestos
+                p.stat-numero #{estadisticas.presupuestosVigentes}
+                p.stat-detalle Vigentes
+            a.stat-link(href='/presupuestos') Ver todos →
 
-    if registros && registros.length > 0
-        table
-            thead
-                tr
-                    th Entidad
-                    th Nombre
-                    th Tipo
-                    th Doc / CUIT
-                    th Saldo
-                    th Acciones
-            tbody
-                each reg in registros
+    //- Accesos rápidos
+    .accesos-rapidos
+        h2 🔗 Accesos Rápidos
+        .grid-accesos
+            a.boton-acceso(href='/finanzas/cuentas-cobrar')
+                span.icono 💵
+                span.texto Cuentas por Cobrar
+            a.boton-acceso(href='/finanzas/cuentas-pagar')
+                span.icono 💳
+                span.texto Cuentas por Pagar
+            a.boton-acceso(href='/facturas-cliente')
+                span.icono 🧾
+                span.texto Facturas Clientes
+            a.boton-acceso(href='/facturas-proveedor')
+                span.icono 📑
+                span.texto Facturas Proveedores
+            a.boton-acceso(href='/ordenes-pago')
+                span.icono 💰
+                span.texto Órdenes de Pago
+            a.boton-acceso(href='/notas-credito')
+                span.icono ➖
+                span.texto Notas de Crédito
+            a.boton-acceso(href='/notas-debito')
+                span.icono ➕
+                span.texto Notas de Débito
+            a.boton-acceso(href='/presupuestos')
+                span.icono 📊
+                span.texto Presupuestos
+
+    //- Últimos movimientos
+    .ultimos-movimientos
+        h2 🕐 Últimos Movimientos
+        
+        if ultimosMovimientos && ultimosMovimientos.length > 0
+            table
+                thead
                     tr
-                        td= reg.entidad
-                        td= reg.nombre
-                        td= reg.tipo
-                        td= reg.nroDoc
-                        td(style=`color: ${reg.saldo > 0 ? 'green' : (reg.saldo < 0 ? '#cc0000' : '#333')}`)
-                            - let saldoAbs = Math.abs(parseFloat(reg.saldo) || 0);
-                            | $ #{saldoAbs.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} 
-                            if reg.saldo > 0
-                                | (a favor)
-                            else if reg.saldo < 0
-                                | (deuda)
-                            else
-                                | (al día)
-                        td
-                            div.acciones-container
-                                if reg.entidad === 'Cliente'
-                                    a(href=`/clientes/editar/${reg.id}`).btn-editar Ver Perfil
-                                else
-                                    a(href=`/proveedores/editar/${reg.id}`).btn-editar Ver Perfil
-    else
-        p No hay movimientos registrados en el sistema.
+                        th Tipo
+                        th Número
+                        th Entidad
+                        th Fecha
+                        th Monto
+                        th Estado
+                        th Acciones
+                tbody
+                    each mov in ultimosMovimientos
+                        tr
+                            td= mov.tipo
+                            td= mov.numero
+                            td= mov.entidad
+                            td= new Date(mov.fecha).toLocaleDateString('es-AR')
+                            td.monto $ #{mov.monto.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                            td
+                                span.badge(class=`badge-${mov.estatus.toLowerCase()}`)= mov.estatus
+                            td
+                                a.btn-ver(href=mov.link) Ver
+        else
+            p.sin-datos No hay movimientos recientes registrados.

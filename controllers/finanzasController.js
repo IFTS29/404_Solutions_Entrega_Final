@@ -1,109 +1,207 @@
-const Cliente = require("../models/Cliente");
-const Proveedor = require("../models/Proveedor");
+const FacturaCliente = require("../models/FacturaCliente");
+const FacturaProveedor = require("../models/FacturaProveedor");
+const OrdenPago = require("../models/OrdenPago");
+const Presupuesto = require("../models/Presupuesto");
 
 const finanzasController = {
+  // Dashboard principal con estadísticas
   resumen: async (req, res) => {
     try {
-      let totalCobrar = 0;
-      let totalPagar = 0;
-      const listaFinanzas = [];
+      // Estadísticas de documentos
+      const facturasClientesPendientes = await FacturaCliente.countDocuments({ estatus: "Pendiente" });
+      const facturasProveedoresPendientes = await FacturaProveedor.countDocuments({ estatus: "Pendiente" });
+      const ordenesPagoPendientes = await OrdenPago.countDocuments({ estatus: "Pendiente" });
+      const presupuestosVigentes = await Presupuesto.countDocuments({ 
+        estatus: "Pendiente",
+        fechaValidez: { $gte: new Date() }
+      });
 
-      // procesar clientes
-      const clientes = await Cliente.find().sort({ createdAt: 1 });
+      // Montos pendientes
+      const facturasClientesPendientesData = await FacturaCliente.find({ estatus: "Pendiente" });
+      const totalPorCobrar = facturasClientesPendientesData.reduce((sum, f) => sum + (f.total || 0), 0);
+
+      const facturasProveedoresPendientesData = await FacturaProveedor.find({ estatus: "Pendiente" });
+      const totalPorPagar = facturasProveedoresPendientesData.reduce((sum, f) => sum + (f.total || 0), 0);
+
+      // Últimos movimientos (5 más recientes)
+      const ultimosMovimientos = [];
+
+      // Facturas clientes
+      const ultFactClientes = await FacturaCliente.find()
+        .populate('clienteId', 'nombre razonSocial tipoDoc')
+        .sort({ createdAt: -1 })
+        .limit(3);
       
-      clientes.forEach((c) => {
-        // FORZAR a que sea número - SOLUCIÓN PRINCIPAL
-        let saldo = 0;
+      ultFactClientes.forEach(f => {
+        const clienteNombre = f.clienteId 
+          ? (f.clienteId.tipoDoc === 'DNI' ? f.clienteId.nombre : f.clienteId.razonSocial)
+          : f.clienteInfo?.razonSocial || 'Cliente desconocido';
         
-        if (typeof c.saldoCuentaCorriente === 'string') {
-          // Si es string, limpiar y convertir
-          saldo = parseFloat(c.saldoCuentaCorriente.replace(/[^0-9.-]/g, '')) || 0;
-        } else if (typeof c.saldoCuentaCorriente === 'number') {
-          saldo = c.saldoCuentaCorriente;
-        } else {
-          saldo = 0;
-        }
-        
-        // Redondear a 2 decimales
-        saldo = Math.round(saldo * 100) / 100;
-        
-        console.log(`Cliente ${c._id}: saldo original = ${c.saldoCuentaCorriente}, convertido = ${saldo}`);
-
-        if (saldo > 0) totalCobrar += saldo;
-        if (saldo < 0) totalPagar += Math.abs(saldo);
-
-        listaFinanzas.push({
-          entidad: "Cliente",
-          id: c._id,
-          nombre: c.tipoDoc === "DNI" ? (c.nombre || 'Sin nombre') : (c.razonSocial || 'Sin razón social'),
-          tipo: c.tipoDoc,
-          nroDoc: c.nroDoc,
-          saldo: saldo,
+        ultimosMovimientos.push({
+          tipo: 'Factura Cliente',
+          numero: f.numero,
+          entidad: clienteNombre,
+          fecha: f.fechaEmision,
+          monto: f.total,
+          estatus: f.estatus,
+          link: `/facturas-cliente/ver/${f._id}`
         });
       });
 
-      // procesar proveedores
-      const proveedores = await Proveedor.find().sort({ createdAt: 1 });
+      // Facturas proveedores
+      const ultFactProveedores = await FacturaProveedor.find()
+        .populate('proveedorId', 'nombre razonSocial tipoDoc')
+        .sort({ createdAt: -1 })
+        .limit(2);
       
-      proveedores.forEach((p) => {
-        // FORZAR a que sea número - SOLUCIÓN PRINCIPAL
-        let saldo = 0;
+      ultFactProveedores.forEach(f => {
+        const proveedorNombre = f.proveedorId 
+          ? (f.proveedorId.tipoDoc === 'DNI' ? f.proveedorId.nombre : f.proveedorId.razonSocial)
+          : f.proveedorInfo?.razonSocial || 'Proveedor desconocido';
         
-        if (typeof p.saldoCuentaCorriente === 'string') {
-          saldo = parseFloat(p.saldoCuentaCorriente.replace(/[^0-9.-]/g, '')) || 0;
-        } else if (typeof p.saldoCuentaCorriente === 'number') {
-          saldo = p.saldoCuentaCorriente;
-        } else {
-          saldo = 0;
-        }
-        
-        saldo = Math.round(saldo * 100) / 100;
-        
-        console.log(`Proveedor ${p._id}: saldo original = ${p.saldoCuentaCorriente}, convertido = ${saldo}`);
-
-        if (saldo > 0) totalCobrar += saldo;
-        if (saldo < 0) totalPagar += Math.abs(saldo);
-
-        listaFinanzas.push({
-          entidad: "Proveedor",
-          id: p._id,
-          nombre: p.tipoDoc === "DNI" ? (p.nombre || 'Sin nombre') : (p.razonSocial || 'Sin razón social'),
-          tipo: p.tipoDoc,
-          nroDoc: p.nroDoc,
-          saldo: saldo,
+        ultimosMovimientos.push({
+          tipo: 'Factura Proveedor',
+          numero: f.numero,
+          entidad: proveedorNombre,
+          fecha: f.fechaEmision,
+          monto: f.total,
+          estatus: f.estatus,
+          link: `/facturas-proveedor/ver/${f._id}`
         });
       });
 
-      // REDONDEAR TOTALES FINALES
-      totalCobrar = Math.round(totalCobrar * 100) / 100;
-      totalPagar = Math.round(totalPagar * 100) / 100;
-      const balanceNeto = Math.round((totalCobrar - totalPagar) * 100) / 100;
-      
-      console.log('=== RESULTADOS FINALES ===');
-      console.log('Total a Cobrar (número):', totalCobrar);
-      console.log('Total a Pagar (número):', totalPagar);
-      console.log('Balance Neto (número):', balanceNeto);
-      console.log('Tipos de datos:', typeof totalCobrar, typeof totalPagar, typeof balanceNeto);
+      // Ordenar por fecha
+      ultimosMovimientos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+      const balanceNeto = totalPorCobrar - totalPorPagar;
 
       res.render("finanzas/index", {
         titulo: "Resumen Financiero - TodoStock S.A.",
-        registros: listaFinanzas,
-        totalCobrar: totalCobrar,
-        totalPagar: totalPagar,
-        balanceNeto: balanceNeto,
+        estadisticas: {
+          facturasClientesPendientes,
+          facturasProveedoresPendientes,
+          ordenesPagoPendientes,
+          presupuestosVigentes,
+          totalPorCobrar: Math.round(totalPorCobrar * 100) / 100,
+          totalPorPagar: Math.round(totalPorPagar * 100) / 100,
+          balanceNeto: Math.round(balanceNeto * 100) / 100
+        },
+        ultimosMovimientos: ultimosMovimientos.slice(0, 5)
       });
     } catch (error) {
       console.error('Error en resumen financiero:', error);
       res.render("finanzas/index", {
         titulo: "Resumen Financiero - TodoStock S.A.",
         error: "Error al generar el resumen financiero: " + error.message,
-        registros: [],
-        totalCobrar: 0,
-        totalPagar: 0,
-        balanceNeto: 0,
+        estadisticas: {
+          facturasClientesPendientes: 0,
+          facturasProveedoresPendientes: 0,
+          ordenesPagoPendientes: 0,
+          presupuestosVigentes: 0,
+          totalPorCobrar: 0,
+          totalPorPagar: 0,
+          balanceNeto: 0
+        },
+        ultimosMovimientos: []
       });
     }
   },
+
+  // Cuentas por cobrar (facturas de clientes pendientes)
+  cuentasPorCobrar: async (req, res) => {
+    try {
+      const { fechaDesde, fechaHasta } = req.query;
+      
+      // Mostrar únicamente facturas pendientes
+      let filtro = {
+        estatus: "Pendiente"
+      };
+
+      if (fechaDesde || fechaHasta) {
+        filtro.fechaEmision = {};
+        if (fechaDesde) {
+          const desde = new Date(fechaDesde);
+          desde.setHours(0, 0, 0, 0);
+          filtro.fechaEmision.$gte = desde;
+        }
+        if (fechaHasta) {
+          const hasta = new Date(fechaHasta);
+          hasta.setHours(23, 59, 59, 999);
+          filtro.fechaEmision.$lte = hasta;
+        }
+      }
+
+      const facturas = await FacturaCliente.find(filtro)
+        .populate('clienteId', 'nombre razonSocial tipoDoc nroDoc')
+        .sort({ fechaVencimiento: 1 });
+
+      const total = facturas.reduce((sum, f) => sum + (f.total || 0), 0);
+
+      res.render("finanzas/cuentas-cobrar", {
+        titulo: "Cuentas por Cobrar - TodoStock S.A.",
+        facturas,
+        total: Math.round(total * 100) / 100,
+        filtros: { fechaDesde, fechaHasta }
+      });
+    } catch (error) {
+      console.error('Error en cuentas por cobrar:', error);
+      res.render("finanzas/cuentas-cobrar", {
+        titulo: "Cuentas por Cobrar - TodoStock S.A.",
+        error: "Error al cargar cuentas por cobrar: " + error.message,
+        facturas: [],
+        total: 0,
+        filtros: {}
+      });
+    }
+  },
+
+  // Cuentas por pagar (facturas de proveedores pendientes)
+  cuentasPorPagar: async (req, res) => {
+    try {
+      const { fechaDesde, fechaHasta } = req.query;
+      
+      // Mostrar únicamente facturas pendientes
+      let filtro = {
+        estatus: "Pendiente"
+      };
+
+      if (fechaDesde || fechaHasta) {
+        filtro.fechaEmision = {};
+        if (fechaDesde) {
+          const desde = new Date(fechaDesde);
+          desde.setHours(0, 0, 0, 0);
+          filtro.fechaEmision.$gte = desde;
+        }
+        if (fechaHasta) {
+          const hasta = new Date(fechaHasta);
+          hasta.setHours(23, 59, 59, 999);
+          filtro.fechaEmision.$lte = hasta;
+        }
+      }
+
+      const facturas = await FacturaProveedor.find(filtro)
+        .populate('proveedorId', 'nombre razonSocial tipoDoc nroDoc')
+        .sort({ fechaVencimiento: 1 });
+
+      const total = facturas.reduce((sum, f) => sum + (f.total || 0), 0);
+
+      res.render("finanzas/cuentas-pagar", {
+        titulo: "Cuentas por Pagar - TodoStock S.A.",
+        facturas,
+        total: Math.round(total * 100) / 100,
+        filtros: { fechaDesde, fechaHasta }
+      });
+    } catch (error) {
+      console.error('Error en cuentas por pagar:', error);
+      res.render("finanzas/cuentas-pagar", {
+        titulo: "Cuentas por Pagar - TodoStock S.A.",
+        error: "Error al cargar cuentas por pagar: " + error.message,
+        facturas: [],
+        total: 0,
+        filtros: {}
+      });
+    }
+  }
 };
 
 module.exports = finanzasController;
