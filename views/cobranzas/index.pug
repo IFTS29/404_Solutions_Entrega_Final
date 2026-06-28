@@ -24,7 +24,7 @@ block contenido
             td= cobranza.numero
             td= cobranza.clienteInfo.nombre
             td= cobranza.fechaEmision.toLocaleDateString('es-AR')
-            td $ #{cobranza.montoACobrar.toLocaleString('es-AR', {minimumFractionDigits: 2})}
+            td $ #{cobranza.montoCobrado.toLocaleString('es-AR', {minimumFractionDigits: 2})}
             td
               span(class=`badge badge-${cobranza.estatus.toLowerCase()}`)= cobranza.estatus
             td

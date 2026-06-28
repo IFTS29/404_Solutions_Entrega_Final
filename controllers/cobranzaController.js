@@ -1,4 +1,5 @@
 const Cobranza = require("../models/Cobranza");
+const ReciboCobro = require("../models/ReciboCobro");
 const Cliente = require("../models/Cliente");
 const FacturaCliente = require("../models/FacturaCliente");
 const mongoose = require("mongoose");
@@ -7,7 +8,7 @@ const cobranzaController = {
   // Listar todas las cobranzas
   index: async (req, res) => {
     try {
-      const cobranzas = await Cobranza.find()
+      const cobranzas = await ReciboCobro.find()
         .populate("clienteId", "nombre razonSocial nroDoc")
         .sort({ numero: -1 });
 
@@ -181,29 +182,18 @@ const cobranzaController = {
   // Ver detalle
   ver: async (req, res) => {
     try {
-      const cobranza = await Cobranza.findOne({
+      const recibo = await ReciboCobro.findOne({
         numero: parseInt(req.params.numero),
       }).populate("clienteId", "nombre razonSocial nroDoc telefono direccion");
 
-      if (!cobranza) {
+      if (!recibo) {
         return res.status(404).send("Cobranza no encontrada");
       }
 
-      let facturasRelacionadas = cobranza.facturasCobradas?.length
-        ? cobranza.facturasCobradas
-        : (await FacturaCliente.find({ cobranzaId: cobranza.numero })).map(
-            (f) => ({
-              facturaId: f._id,
-              numero: f.numero,
-              fecha: f.fechaEmision,
-              total: f.total,
-            })
-          );
-
       res.render("cobranzas/ver", {
-        titulo: `Cobranza N° ${cobranza.numero}`,
-        cobranza,
-        facturasRelacionadas,
+        titulo: `Recibo de Cobranza N° ${recibo.numero}`,
+        cobranza: recibo,
+        facturasRelacionadas: recibo.facturasCobradas || [],
       });
     } catch (error) {
       console.error(error);
