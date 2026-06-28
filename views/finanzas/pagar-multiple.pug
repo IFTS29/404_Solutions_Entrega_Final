@@ -19,7 +19,7 @@ block contenido
         select(name="proveedorId" id="proveedorIdMulti" required)
           option(value="") Seleccione un proveedor
           each proveedor in proveedores
-            option(value=proveedor._id.toString() selected=(datos && datos.proveedorId == proveedor._id.toString()))
+            option(value=proveedor._id.toString() selected=(preselectedProveedorId && preselectedProveedorId == proveedor._id.toString()) || (datos && datos.proveedorId == proveedor._id.toString()))
               | #{proveedor.tipoDoc === 'DNI' ? proveedor.nombre : proveedor.razonSocial} - #{proveedor.nroDoc}
 
       button(type="button" id="cargarDocsProv" style="margin-top: 10px;") 📄 Cargar Facturas Pendientes
@@ -169,4 +169,9 @@ block contenido
         montoInput.value = '';
         totalNetoSpan.textContent = '0.00';
       });
+
+      // Auto-cargar si viene con proveedor preseleccionado
+      if (proveedorSelect.value) {
+        cargarBtn.click();
+      }
     })();

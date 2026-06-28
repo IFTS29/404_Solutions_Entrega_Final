@@ -245,6 +245,7 @@ const finanzasController = {
             : f.clienteInfo?.razonSocial || 'Cliente desconocido';
           const doc = f.clienteId ? f.clienteId.nroDoc : f.clienteInfo?.cuit || 'N/A';
           clientesMap[clienteKey] = {
+            clienteId: clienteKey,
             nombre,
             documento: doc,
             facturas: [],
@@ -268,6 +269,7 @@ const finanzasController = {
             : nc.clienteInfo?.razonSocial || 'Cliente desconocido';
           const doc = nc.clienteId ? nc.clienteId.nroDoc : nc.clienteInfo?.cuit || 'N/A';
           clientesMap[clienteKey] = {
+            clienteId: clienteKey,
             nombre,
             documento: doc,
             facturas: [],
@@ -291,6 +293,7 @@ const finanzasController = {
             : nd.clienteInfo?.razonSocial || 'Cliente desconocido';
           const doc = nd.clienteId ? nd.clienteId.nroDoc : nd.clienteInfo?.cuit || 'N/A';
           clientesMap[clienteKey] = {
+            clienteId: clienteKey,
             nombre,
             documento: doc,
             facturas: [],
@@ -454,6 +457,7 @@ const finanzasController = {
         clientes,
         error: null,
         datos: null,
+        preselectedClienteId: req.query.clienteId || null,
       });
     } catch (error) {
       console.error(error);
@@ -681,6 +685,7 @@ const finanzasController = {
         proveedores,
         error: null,
         datos: null,
+        preselectedProveedorId: req.query.proveedorId || null,
       });
     } catch (error) {
       console.error(error);

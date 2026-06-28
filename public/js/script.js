@@ -164,6 +164,7 @@ const montoAPagarInput = document.getElementById("montoAPagar");
 
 let facturasActuales = [];
 
+if (proveedorSelect && cargarFacturasBtn) {
 // Cargar facturas pendientes del proveedor
 cargarFacturasBtn.addEventListener("click", async () => {
   const proveedorId = proveedorSelect.value;
@@ -266,6 +267,12 @@ proveedorSelect.addEventListener("change", () => {
   totalSeleccionadoSpan.textContent = "0.00";
   montoAPagarInput.value = "";
 });
+
+// Auto-cargar facturas si el proveedor viene preseleccionado
+if (proveedorSelect.value) {
+  cargarFacturasBtn.click();
+}
+} // fin if (proveedorSelect && cargarFacturasBtn)
 
 
 // Función para autocompletar datos del producto seleccionado

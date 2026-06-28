@@ -19,7 +19,7 @@ block contenido
         select(name="clienteId" id="clienteIdMulti" required)
           option(value="") Seleccione un cliente
           each cliente in clientes
-            option(value=cliente._id.toString() selected=(datos && datos.clienteId == cliente._id.toString()))
+            option(value=cliente._id.toString() selected=(preselectedClienteId && preselectedClienteId == cliente._id.toString()) || (datos && datos.clienteId == cliente._id.toString()))
               | #{cliente.tipoDoc === 'DNI' ? cliente.nombre : cliente.razonSocial} - #{cliente.nroDoc}
 
       button(type="button" id="cargarDocumentos" style="margin-top: 10px;") 📄 Cargar Documentos Pendientes
@@ -217,4 +217,9 @@ block contenido
         totalNDSpan.textContent = '+$0.00';
         totalNetoSpan.textContent = '0.00';
       });
+
+      // Auto-cargar si viene con cliente preseleccionado
+      if (clienteSelect.value) {
+        cargarBtn.click();
+      }
     })();

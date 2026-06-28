@@ -33,6 +33,7 @@ const ordenPagoController = {
         selectedProveedor: null,
         error: null,
         datos: null,
+        preselectedProveedorId: req.query.proveedorId || '',
       });
     } catch (error) {
       console.error(error);

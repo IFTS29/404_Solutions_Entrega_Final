@@ -6,7 +6,7 @@ block contenido
     h1 💳 Cuentas por Pagar
     
     div.acciones-header
-        a.btn-nuevo(href="/finanzas/pagar") 💸 Pago Múltiple de Facturas
+        a.btn-nuevo(href="/ordenes-pago/nuevo") 💸 Nueva Orden de Pago
     
     if error
         p.error= error
@@ -91,6 +91,8 @@ block contenido
                         td
                             .acciones-container
                                 a.btn-ver(href=`/facturas-proveedor/ver/${factura._id}`) Ver
+                                - const provId = factura.proveedorId ? factura.proveedorId._id.toString() : ''
+                                a.btn-ver(href=`/ordenes-pago/nuevo?proveedorId=${provId}` style="background-color: #28a745; color: white;") 💸 Pagar
     else
         p.sin-datos No hay facturas por pagar con los filtros seleccionados.
     

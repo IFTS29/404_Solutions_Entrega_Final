@@ -5,9 +5,6 @@ block contenido
     
     h1 💰 Cuentas por Cobrar
     
-    div.acciones-header
-        a.btn-nuevo(href="/finanzas/cobrar") 💰 Cobro Múltiple (Facturas + NC + ND)
-    
     if error
         p.error= error
     
@@ -66,6 +63,7 @@ block contenido
                         h3.cliente-nombre 👤 #{cliente.nombre}
                         span.cliente-doc #{cliente.documento}
                     .cliente-saldo
+                        a.btn-nuevo(href=`/finanzas/cobrar?clienteId=${cliente.clienteId || ''}` style="margin-right: 10px; font-size: 0.85rem;") 💰 Cobrar
                         span.saldo-label Saldo:
                         span.saldo-valor(class=cliente.saldoNeto > 0 ? 'positivo' : '') $ #{cliente.saldoNeto.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                 
