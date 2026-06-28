@@ -216,7 +216,7 @@ const authController = {
   },
 };
 
-// Exportamr el controlador Y los middlewares
+// Exportar el controlador Y los middlewares
 module.exports = {
   authController,
   isAuthenticated,

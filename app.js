@@ -4,6 +4,7 @@ const path = require('path');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const connectDB = require('./config/database');
+const { notFound, errorHandler } = require('./middlewares/errorHandler');
 require('dotenv').config();
 
 
@@ -35,11 +36,11 @@ app.use(session({
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: false,                     // mientras tanto, para debug
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax'
   },
-  proxy: true,                         // importante en Vercel
-  trustProxy: 1                        // crucial para Vercel
+  proxy: true,
+  trustProxy: 1
 }));
 
 
@@ -92,6 +93,10 @@ app.get("/", (req, res) => {
     res.redirect('/login');
   }
 });
+
+// Middleware de manejo de errores (DEBE IR AL FINAL)
+app.use(notFound);
+app.use(errorHandler);
 
 // const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
