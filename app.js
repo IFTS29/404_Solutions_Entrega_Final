@@ -145,7 +145,7 @@ const facturaClienteRoutes = require("./routes/facturaClienteRoutes");
 const notaDeDebitoRoutes = require("./routes/notaDeDebitoRoutes");
 const notaDeCreditoRoutes = require("./routes/notaDeCreditoRoutes");
 const presupuestoRoutes = require("./routes/presupuestoRoutes");
-const cobranzasRoutes = require("./routes/cobranzasRoutes");
+const reciboCobroRoutes = require("./routes/reciboCobroRoutes");
 
 // NUEVO: Importar rutas API con JWT
 const apiRoutes = require("./routes/apiRoutes");
@@ -253,7 +253,7 @@ app.use("/facturas-cliente", requireLogin, facturaClienteRoutes);
 app.use("/notas-debito", requireLogin, notaDeDebitoRoutes);
 app.use("/notas-credito", requireLogin, notaDeCreditoRoutes);
 app.use("/presupuestos", requireLogin, presupuestoRoutes);
-app.use("/cobranzas", requireLogin, cobranzasRoutes);
+app.use("/recibos-cobro", requireLogin, reciboCobroRoutes);
 
 // Redireccionar raíz
 app.get("/", (req, res) => {
