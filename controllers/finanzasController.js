@@ -2,6 +2,8 @@ const FacturaCliente = require("../models/FacturaCliente");
 const FacturaProveedor = require("../models/FacturaProveedor");
 const OrdenPago = require("../models/OrdenPago");
 const Presupuesto = require("../models/Presupuesto");
+const NotaDeCredito = require("../models/NotaDeCredito");
+const NotaDeDebito = require("../models/NotaDeDebito");
 
 const finanzasController = {
   // Dashboard principal con estadísticas
