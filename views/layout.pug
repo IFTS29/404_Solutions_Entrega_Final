@@ -5,23 +5,36 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title= titulo
     link(rel="stylesheet" href="/css/styles.css")
-    link(rel="icon" href="/logo404solution.ico" type="image/x-icon")
 
   body
     if usuario
-      header
-        nav
-          ul
-            li: a(href="/dashboard") Dashboard
-            li: a(href="/productos") Productos
-            li: a(href="/clientes") Clientes
-            li: a(href="/proveedores") Proveedores
-            li: a(href="/finanzas") Finanzas
-            li.user-info-container
-              .user-info-text
-                span.username-nav #{usuario.username}
-                span.badge-rol #{usuario.rol}
-              a.logout-link(href="/logout") Cerrar Sesión
+      if usuario.rol === 'usuario'
+        header
+          nav
+            ul
+              li: a(href="/dashboard") Dashboard
+              li: a(href="/productos") Productos
+              li: a(href="/clientes") Clientes
+              li: a(href="/proveedores") Proveedores
+              li: a(href="/finanzas") Finanzas
+              li(style="margin-left: auto;")
+                span(style="font-size: 1rem; font-weight: bold;") #{usuario.username}
+                a(href="/logout" style="margin-left: 10px; color: #f32d2d; font-weight: bold;") Cerrar Sesión
+
+      if usuario.rol === 'admin'
+        header
+          nav
+            ul
+              li: a(href="/dashboard") Dashboard
+              li: a(href="/admin") Usuarios
+              li: a(href="/facturas-proveedor/inventario") Inventario
+              li: a(href="/productos") Productos
+              li: a(href="/clientes") Clientes
+              li: a(href="/proveedores") Proveedores
+              li: a(href="/finanzas") Finanzas
+              li(style="margin-left: auto;")
+                span(style="font-size: 1rem; font-weight: bold;") #{usuario.username}
+                a(href="/logout" style="margin-left: 10px; color: #f32d2d; font-weight: bold;") Cerrar Sesión
     else
       header
         nav
