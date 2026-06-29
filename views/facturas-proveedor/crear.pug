@@ -66,7 +66,7 @@ block contenido
               select(name="detalles[productoId][]" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" class="producto-select")
                 option(value="") -- Seleccionar producto --
                 each producto in productos
-                  option(value=producto.id data-nombre=producto.nombre data-precio=producto.precio)
+                  option(value=producto._id.toString() data-nombre=producto.nombre data-precio=producto.precio)
                     | #{producto.nombre}
             div
               label(style="font-weight: bold; display: none; margin-bottom: 5px;") Código:
