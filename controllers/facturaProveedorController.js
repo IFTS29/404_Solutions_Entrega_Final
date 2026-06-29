@@ -70,27 +70,37 @@ const facturaProveedorController = {
       // Parsear detalles del formulario
       const detallesArray = [];
       if (detalles && detalles.codigo) {
-        const numDetalles = detalles.codigo.length;
+        // Asegurar que sean arrays
+        const codigos = Array.isArray(detalles.codigo) ? detalles.codigo : [detalles.codigo];
+        const descripciones = Array.isArray(detalles.descripcion) ? detalles.descripcion : [detalles.descripcion];
+        const cantidades = Array.isArray(detalles.cantidad) ? detalles.cantidad : [detalles.cantidad];
+        const precios = Array.isArray(detalles.precioUnitario) ? detalles.precioUnitario : [detalles.precioUnitario];
+        const ivas = Array.isArray(detalles.alicIva) ? detalles.alicIva : [detalles.alicIva];
+        const productoIds = detalles.productoId 
+          ? (Array.isArray(detalles.productoId) ? detalles.productoId : [detalles.productoId])
+          : [];
+
+        const numDetalles = codigos.length;
         for (let i = 0; i < numDetalles; i++) {
-          const cantidad = parseFloat(detalles.cantidad[i]) || 0;
-          const precioUnitario = parseFloat(detalles.precioUnitario[i]) || 0;
+          const cantidad = parseFloat(cantidades[i]) || 0;
+          const precioUnitario = parseFloat(precios[i]) || 0;
           const importe = cantidad * precioUnitario;
 
-          // Si hay productoId, asegurarse de que sea ObjectId
+          // Si hay productoId, validar que sea ObjectId de 24 chars
           let productoId = null;
-          if (detalles.productoId && detalles.productoId[i]) {
-            const id = detalles.productoId[i];
-            if (mongoose.Types.ObjectId.isValid(id)) {
-              productoId = id;
+          if (productoIds[i]) {
+            const id = productoIds[i].trim();
+            if (id && id.length === 24 && mongoose.Types.ObjectId.isValid(id)) {
+              productoId = new mongoose.Types.ObjectId(id);
             }
           }
 
           detallesArray.push({
-            codigo: detalles.codigo[i],
-            descripcion: detalles.descripcion[i],
+            codigo: codigos[i] || '',
+            descripcion: descripciones[i] || '',
             cantidad: cantidad,
             precioUnitario: precioUnitario,
-            alicIva: detalles.alicIva[i] || "21%",
+            alicIva: ivas[i] || "21%",
             importe: importe,
             productoId: productoId,
             actualizarStock: true,

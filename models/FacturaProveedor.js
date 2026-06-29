@@ -12,7 +12,13 @@ const detalleFacturaSchema = new mongoose.Schema({
   productoId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Producto',
-    default: null 
+    default: null,
+    set: function(v) {
+      if (!v || v === '') return null;
+      if (typeof v === 'string') v = v.trim();
+      if (mongoose.Types.ObjectId.isValid(v) && String(v).length === 24) return v;
+      return null;
+    }
   },
   actualizarStock: { type: Boolean, default: true },
 });
