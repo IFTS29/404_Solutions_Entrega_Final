@@ -13,6 +13,6 @@ router.get('/logout', authController.logout);
 // router.get('/logout', isAuthenticated, authController.logout);
 
 // Dashboard (protegido)
-router.get('/dashboard', authController.dashboard);
+router.get('/dashboard', isAuthenticated, authController.dashboard);
 
 module.exports = router;
