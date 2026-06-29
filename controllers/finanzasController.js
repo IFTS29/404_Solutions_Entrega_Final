@@ -17,7 +17,7 @@ const finanzasController = {
       const facturasClientesPendientes = await FacturaCliente.countDocuments({ estatus: "Pendiente" });
       const facturasProveedoresPendientes = await FacturaProveedor.countDocuments({ estatus: "Pendiente" });
       const ordenesPagoPendientes = await OrdenPago.countDocuments({ estatus: "Pendiente" });
-      const presupuestosVigentes = await Presupuesto.countDocuments({ 
+      const presupuestosVigentes = await Presupuesto.countDocuments({
         estatus: "Pendiente",
         fechaValidez: { $gte: new Date() }
       });
@@ -50,12 +50,12 @@ const finanzasController = {
         .populate('clienteId', 'nombre razonSocial tipoDoc')
         .sort({ createdAt: -1 })
         .limit(3);
-      
+
       ultFactClientes.forEach(f => {
-        const clienteNombre = f.clienteId 
+        const clienteNombre = f.clienteId
           ? (f.clienteId.tipoDoc === 'DNI' ? f.clienteId.nombre : f.clienteId.razonSocial)
           : f.clienteInfo?.razonSocial || 'Cliente desconocido';
-        
+
         ultimosMovimientos.push({
           tipo: 'Factura Cliente',
           numero: f.numero,
@@ -72,12 +72,12 @@ const finanzasController = {
         .populate('proveedorId', 'nombre razonSocial tipoDoc')
         .sort({ createdAt: -1 })
         .limit(3);
-      
+
       ultFactProveedores.forEach(f => {
-        const proveedorNombre = f.proveedorId 
+        const proveedorNombre = f.proveedorId
           ? (f.proveedorId.tipoDoc === 'DNI' ? f.proveedorId.nombre : f.proveedorId.razonSocial)
           : f.proveedorInfo?.razonSocial || 'Proveedor desconocido';
-        
+
         ultimosMovimientos.push({
           tipo: 'Factura Proveedor',
           numero: f.numero,
@@ -94,12 +94,12 @@ const finanzasController = {
         .populate('clienteId', 'nombre razonSocial tipoDoc')
         .sort({ createdAt: -1 })
         .limit(3);
-      
+
       ultNotasCredito.forEach(nc => {
-        const clienteNombre = nc.clienteId 
+        const clienteNombre = nc.clienteId
           ? (nc.clienteId.tipoDoc === 'DNI' ? nc.clienteId.nombre : nc.clienteId.razonSocial)
           : nc.clienteInfo?.razonSocial || 'Cliente desconocido';
-        
+
         ultimosMovimientos.push({
           tipo: 'Nota de Crédito',
           numero: nc.numero,
@@ -116,12 +116,12 @@ const finanzasController = {
         .populate('clienteId', 'nombre razonSocial tipoDoc')
         .sort({ createdAt: -1 })
         .limit(3);
-      
+
       ultNotasDebito.forEach(nd => {
-        const clienteNombre = nd.clienteId 
+        const clienteNombre = nd.clienteId
           ? (nd.clienteId.tipoDoc === 'DNI' ? nd.clienteId.nombre : nd.clienteId.razonSocial)
           : nd.clienteInfo?.razonSocial || 'Cliente desconocido';
-        
+
         ultimosMovimientos.push({
           tipo: 'Nota de Débito',
           numero: nd.numero,
@@ -178,7 +178,7 @@ const finanzasController = {
   cuentasPorCobrar: async (req, res) => {
     try {
       const { fechaDesde, fechaHasta, clienteId, tipoDoc } = req.query;
-      
+
       // Traer todos los clientes para el select
       const todosLosClientes = await Cliente.find().sort({ razonSocial: 1, nombre: 1 });
 
@@ -240,7 +240,7 @@ const finanzasController = {
       facturas.forEach(f => {
         const clienteKey = f.clienteId ? f.clienteId._id.toString() : 'desconocido';
         if (!clientesMap[clienteKey]) {
-          const nombre = f.clienteId 
+          const nombre = f.clienteId
             ? (f.clienteId.tipoDoc === 'DNI' ? f.clienteId.nombre : f.clienteId.razonSocial)
             : f.clienteInfo?.razonSocial || 'Cliente desconocido';
           const doc = f.clienteId ? f.clienteId.nroDoc : f.clienteInfo?.cuit || 'N/A';
@@ -264,7 +264,7 @@ const finanzasController = {
       notasCredito.forEach(nc => {
         const clienteKey = nc.clienteId ? nc.clienteId._id.toString() : 'desconocido';
         if (!clientesMap[clienteKey]) {
-          const nombre = nc.clienteId 
+          const nombre = nc.clienteId
             ? (nc.clienteId.tipoDoc === 'DNI' ? nc.clienteId.nombre : nc.clienteId.razonSocial)
             : nc.clienteInfo?.razonSocial || 'Cliente desconocido';
           const doc = nc.clienteId ? nc.clienteId.nroDoc : nc.clienteInfo?.cuit || 'N/A';
@@ -288,7 +288,7 @@ const finanzasController = {
       notasDebito.forEach(nd => {
         const clienteKey = nd.clienteId ? nd.clienteId._id.toString() : 'desconocido';
         if (!clientesMap[clienteKey]) {
-          const nombre = nd.clienteId 
+          const nombre = nd.clienteId
             ? (nd.clienteId.tipoDoc === 'DNI' ? nd.clienteId.nombre : nd.clienteId.razonSocial)
             : nd.clienteInfo?.razonSocial || 'Cliente desconocido';
           const doc = nd.clienteId ? nd.clienteId.nroDoc : nd.clienteInfo?.cuit || 'N/A';

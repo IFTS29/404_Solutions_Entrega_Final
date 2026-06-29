@@ -3,9 +3,16 @@ extends ../layout
 block contenido
   style.
     @media print {
+      @page {margin: 10mm;}
       .no-print { display: none; }
+      nav { display:none; }
       body { margin: 0; padding: 20px; }
-      .orden-pago { box-shadow: none; }
+      .orden-pago { box-shadow: none;
+        border: none;
+        max-width: 100%;
+        padding: 10px;
+        font-size: 0.75rem;}
+      footer { display:none; }
     }
     .orden-pago {
       max-width: 900px;

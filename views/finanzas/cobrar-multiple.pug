@@ -92,7 +92,7 @@ block contenido
         textarea(name="observaciones" rows="3")= datos ? datos.observaciones : ''
 
     div.form-actions
-      button(type="submit").btn-guardar 💰 Emitir Recibo de Cobro
+      button(type="submit" onclick="return confirm('¿Confirmar cobro?\\n\\nEsta acción marcará los documentos seleccionados como cobrados.')").btn-guardar 💰 Emitir Recibo de Cobro
       a(href="/finanzas/cuentas-cobrar").btn-cancelar Cancelar
 
   script.
