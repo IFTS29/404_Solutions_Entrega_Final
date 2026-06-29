@@ -150,46 +150,49 @@ La plataforma permite gestionar de forma integral: productos, clientes, proveedo
 │   └── database.js
 ├── 📂 controllers/         # Lógica de negocio (13 controladores)
 │   ├── authController.js
-│   ├── productoController.js
 │   ├── clienteController.js
-│   ├── proveedorController.js
 │   ├── facturaClienteController.js
 │   ├── facturaProveedorController.js
-│   ├── ordenPagoController.js
-│   ├── reciboCobroController.js
+│   ├── finanzasController.js
+│   ├── homeController.js
 │   ├── notaDeCreditoController.js
 │   ├── notaDeDebitoController.js
+│   ├── ordenPagoController.js
 │   ├── presupuestoController.js
-│   ├── finanzasController.js
-│   └── homeController.js
+│   ├── productoController.js
+│   ├── proveedorController.js
+│   └── reciboCobroController.js
 ├── 📂 models/              # Schemas de Mongoose (11 modelos)
-│   ├── Usuario.js
-│   ├── Producto.js
 │   ├── Cliente.js
-│   ├── Proveedor.js
 │   ├── FacturaCliente.js
 │   ├── FacturaProveedor.js
-│   ├── OrdenPago.js
-│   ├── ReciboCobro.js
 │   ├── NotaDeCredito.js
 │   ├── NotaDeDebito.js
-│   └── Presupuesto.js
-├── 📂 routes/              # Definición de endpoints (14 rutas)
+│   ├── OrdenPago.js
+│   ├── Presupuesto.js
+│   ├── Producto.js
+│   ├── Proveedor.js
+│   ├── ReciboCobro.js
+│   └── Usuario.js
+├── 📂 routes/              # Definición de endpoints (16 rutas)
+│   ├── adminRoutes.js
+│   ├── apiRoutes.js
 │   ├── authRoutes.js
-│   ├── productoRoutes.js
 │   ├── clienteRoutes.js
-│   ├── proveedorRoutes.js
+│   ├── cobranzasRoutes.js
 │   ├── facturaClienteRoutes.js
 │   ├── facturaProveedorRoutes.js
-│   ├── ordenPagoRoutes.js
-│   ├── reciboCobroRoutes.js
-│   ├── notaDeCreditoRoutes.js
-│   ├── notaDeDebitoRoutes.js
-│   ├── presupuestoRoutes.js
 │   ├── finanzasRoutes.js
 │   ├── homeRoutes.js
-│   └── adminRoutes.js
+│   ├── notaDeCreditoRoutes.js
+│   ├── notaDeDebitoRoutes.js
+│   ├── ordenPagoRoutes.js
+│   ├── presupuestoRoutes.js
+│   ├── productoRoutes.js
+│   ├── proveedorRoutes.js
+│   └── reciboCobroRoutes.js
 ├── 📂 middlewares/         # Middlewares personalizados
+│   ├── authJWT.js         # Autenticación JWT
 │   └── errorHandler.js    # Manejo centralizado de errores
 ├── 📂 services/            # Lógica de negocio reutilizable
 │   └── stockService.js    # Gestión de inventario
@@ -197,22 +200,24 @@ La plataforma permite gestionar de forma integral: productos, clientes, proveedo
 │   ├── layout.pug         # Layout base
 │   ├── error.pug          # Página de error
 │   ├── 📂 auth/
-│   ├── 📂 productos/
 │   ├── 📂 clientes/
-│   ├── 📂 proveedores/
+│   ├── 📂 cobranzas/
 │   ├── 📂 facturas-cliente/
 │   ├── 📂 facturas-proveedor/
-│   ├── 📂 ordenes-pago/
-│   ├── 📂 recibos-cobro/
+│   ├── 📂 finanzas/
+│   ├── 📂 home/
 │   ├── 📂 notas-credito/
 │   ├── 📂 notas-debito/
+│   ├── 📂 ordenes-pago/
 │   ├── 📂 presupuestos/
-│   └── 📂 finanzas/
+│   ├── 📂 productos/
+│   ├── 📂 proveedores/
+│   └── 📂 recibos-cobro/
 ├── 📂 public/              # Archivos estáticos
 │   ├── 📂 css/
-│   └── 📂 img/
+│   ├── 📂 img/
+│   └── 📂 js/
 ├── .env                    # Variables de entorno (no versionado)
-├── .env.example            # Ejemplo de configuración
 ├── .gitignore
 ├── app.js                  # Punto de entrada
 ├── package.json
@@ -741,11 +746,11 @@ const errorHandler = (err, req, res, next) => {
 **Estadísticas de la Versión 2.1:**
 - 📁 **13 controladores** (lógica de negocio)
 - 🗄️ **11 modelos** de Mongoose
-- 🛤️ **14 archivos de rutas**
+- 🛤️ **16 archivos de rutas**
 - 📄 **30+ vistas** en Pug
 - 🎨 **1 archivo CSS** de 1000+ líneas (completamente responsive)
-- 🔧 **2 servicios** reutilizables
-- ⚙️ **2 middlewares** personalizados
+- 🔧 **1 servicio** reutilizable (stockService)
+- ⚙️ **2 middlewares** personalizados (errorHandler, authJWT)
 
 **Comparación de versiones:**
 
