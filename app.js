@@ -121,6 +121,8 @@
 
 
 const express = require('express');
+require('dotenv').config();
+
 const app = express();
 const path = require('path');
 const session = require('express-session');
@@ -129,7 +131,7 @@ const cookieParser = require('cookie-parser'); // NUEVO
 const jwt = require('jsonwebtoken'); // NUEVO
 const connectDB = require('./config/database');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
-require('dotenv').config();
+
 
 // Importar rutas
 const homeRoutes = require("./routes/homeRoutes");
@@ -240,7 +242,7 @@ app.use("/", authRoutes);
 app.use("/api", apiRoutes);
 
 // Rutas protegidas (requieren login)
-app.use("/dashboard", requireLogin, authRoutes);
+// app.use("/dashboard", requireLogin, authRoutes);
 app.use("/home", requireLogin, homeRoutes);
 app.use("/productos", requireLogin, rutasProductos);
 app.use("/clientes", requireLogin, clienteRoutes);
