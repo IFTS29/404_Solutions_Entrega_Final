@@ -17,8 +17,11 @@
 **Grupo:** 404Solution
 
 **Estado del Proyecto:** ✅ Completado y desplegado  
-**Versión Actual:** 2.0.0  
+**Versión Actual:** 2.1.0  
 **Última Actualización:** Junio 2026
+
+🔗 **Repositorio:** [https://github.com/IFTS29/404_Solutions_Entrega_Final.git](https://github.com/IFTS29/404_Solutions_Entrega_Final.git)  
+🌐 **Demo en vivo:** [https://404-solutions-entrega-final.vercel.app](https://404-solutions-entrega-final.vercel.app/login)
 
 ---
 
@@ -32,7 +35,8 @@
 - ✅ **Autenticación segura** con bcrypt + hashing de contraseñas
 - ✅ **Sesiones persistentes** con express-session + connect-mongo
 - ✅ **Sistema de roles** y autorización (admin, contador, usuario)
-- ✅ **Módulos completos** de facturación, notas de crédito/débito, órdenes de pago, presupuestos
+- ✅ **Módulos completos** de facturación, notas de crédito/débito, órdenes de pago, recibos de cobro, presupuestos
+- ✅ **Cobro y pago múltiple** con selección de documentos (facturas + NC + ND) y generación de comprobantes
 - ✅ **Gestión automática de stock** con control de movimientos
 - ✅ **Middleware de manejo de errores** centralizado
 - ✅ **Interfaz responsive** con CSS moderno y mobile-first
@@ -103,12 +107,16 @@ La plataforma permite gestionar de forma integral: productos, clientes, proveedo
 
 ### 💰 Gestión Financiera
 - Órdenes de pago con múltiples facturas
+- Recibos de cobro con selección de facturas pendientes
+- Cobro múltiple a clientes (facturas - NC + ND = total neto)
+- Pago múltiple a proveedores con generación de orden de pago
 - Notas de crédito (devoluciones y ajustes negativos)
 - Notas de débito (cargos adicionales)
 - Presupuestos con fechas de validez
 - Estados de documentos: Pendiente, Pagada, Anulada, Parcial
 - Cálculo automático de saldos
 - Resumen financiero por cliente y proveedor
+- Botón de cobro/pago directo desde las vistas de cuentas por cobrar/pagar
 
 ### 🛡️ Manejo de Errores
 - Middleware centralizado de errores
@@ -140,7 +148,7 @@ La plataforma permite gestionar de forma integral: productos, clientes, proveedo
 📁 Estructura del Proyecto
 ├── 📂 config/              # Configuración de base de datos
 │   └── database.js
-├── 📂 controllers/         # Lógica de negocio (12 controladores)
+├── 📂 controllers/         # Lógica de negocio (13 controladores)
 │   ├── authController.js
 │   ├── productoController.js
 │   ├── clienteController.js
@@ -148,12 +156,13 @@ La plataforma permite gestionar de forma integral: productos, clientes, proveedo
 │   ├── facturaClienteController.js
 │   ├── facturaProveedorController.js
 │   ├── ordenPagoController.js
+│   ├── reciboCobroController.js
 │   ├── notaDeCreditoController.js
 │   ├── notaDeDebitoController.js
 │   ├── presupuestoController.js
 │   ├── finanzasController.js
 │   └── homeController.js
-├── 📂 models/              # Schemas de Mongoose (10 modelos)
+├── 📂 models/              # Schemas de Mongoose (11 modelos)
 │   ├── Usuario.js
 │   ├── Producto.js
 │   ├── Cliente.js
@@ -161,10 +170,11 @@ La plataforma permite gestionar de forma integral: productos, clientes, proveedo
 │   ├── FacturaCliente.js
 │   ├── FacturaProveedor.js
 │   ├── OrdenPago.js
+│   ├── ReciboCobro.js
 │   ├── NotaDeCredito.js
 │   ├── NotaDeDebito.js
 │   └── Presupuesto.js
-├── 📂 routes/              # Definición de endpoints (13 rutas)
+├── 📂 routes/              # Definición de endpoints (14 rutas)
 │   ├── authRoutes.js
 │   ├── productoRoutes.js
 │   ├── clienteRoutes.js
@@ -172,6 +182,7 @@ La plataforma permite gestionar de forma integral: productos, clientes, proveedo
 │   ├── facturaClienteRoutes.js
 │   ├── facturaProveedorRoutes.js
 │   ├── ordenPagoRoutes.js
+│   ├── reciboCobroRoutes.js
 │   ├── notaDeCreditoRoutes.js
 │   ├── notaDeDebitoRoutes.js
 │   ├── presupuestoRoutes.js
@@ -192,6 +203,7 @@ La plataforma permite gestionar de forma integral: productos, clientes, proveedo
 │   ├── 📂 facturas-cliente/
 │   ├── 📂 facturas-proveedor/
 │   ├── 📂 ordenes-pago/
+│   ├── 📂 recibos-cobro/
 │   ├── 📂 notas-credito/
 │   ├── 📂 notas-debito/
 │   ├── 📂 presupuestos/
@@ -323,6 +335,11 @@ El servidor estará disponible en `http://localhost:3000`
 | Crear nota de crédito | Registrar devolución | NC creada, monto negativo | ✅ PASS |
 | Crear nota de débito | Registrar cargo adicional | ND creada, monto positivo | ✅ PASS |
 | Crear presupuesto | Generar presupuesto con validez | Presupuesto guardado con fecha | ✅ PASS |
+| Crear recibo de cobro | Seleccionar facturas de cliente y cobrar | Recibo emitido, facturas pagadas | ✅ PASS |
+| Cobro múltiple con NC y ND | Seleccionar facturas + NC + ND de cliente | Total neto calculado correctamente | ✅ PASS |
+| Pago múltiple a proveedor | Seleccionar varias facturas del proveedor | Orden de pago generada con total | ✅ PASS |
+| Anular recibo de cobro | Anular recibo emitido | Facturas vuelven a Pendiente | ✅ PASS |
+| Pagar desde cuentas por pagar | Click en "Pagar" en factura de proveedor | Redirige a orden de pago con proveedor preseleccionado | ✅ PASS |
 
 #### **6. Manejo de Errores**
 | Prueba | Procedimiento | Resultado Esperado | Estado |
@@ -345,8 +362,8 @@ El servidor estará disponible en `http://localhost:3000`
 - **Postman:** (opcional) Pruebas de endpoints específicos
 
 ### **Resultados Totales:**
-- ✅ **Pruebas exitosas:** 30/30 (100%)
-- ❌ **Pruebas fallidas:** 0/30 (0%)
+- ✅ **Pruebas exitosas:** 35/35 (100%)
+- ❌ **Pruebas fallidas:** 0/35 (0%)
 - ⚠️ **Limitaciones identificadas:** Ver sección "Problemas Conocidos"
 
 ### **Mejoras Futuras (Testing Automatizado):**
@@ -431,7 +448,6 @@ Configurar en el dashboard de Vercel:
 ### Producto
 ```javascript
 {
-  id: Number,
   nombre: String,
   categoria: String,
   precio: Number,
@@ -445,18 +461,34 @@ Configurar en el dashboard de Vercel:
 {
   numero: String (único),
   puntoVenta: Number,
-  clienteId: Number,
+  clienteId: ObjectId (ref: 'Cliente'),
   clienteInfo: Object,
   empresaInfo: Object,
   fechaEmision: Date,
   fechaVencimiento: Date,
   estatus: String (enum: 'Pendiente', 'Pagada', 'Anulada', 'Parcial'),
-  detalles: [Array de productos],
+  detalles: [Array de productos con productoId ref a Producto],
   subtotalNeto: Number (calculado automáticamente),
   iva21: Number (calculado automáticamente),
   iva105: Number (calculado automáticamente),
   total: Number (calculado automáticamente),
   stockDescontado: Boolean
+}
+```
+
+### ReciboCobro
+```javascript
+{
+  numero: Number (auto-incremental),
+  clienteId: ObjectId (ref: 'Cliente'),
+  clienteInfo: Object,
+  fechaEmision: Date,
+  estatus: String (enum: 'Emitido', 'Anulado'),
+  facturasCobradas: [{ facturaId, numero, fecha, total }],
+  formasPago: [{ formaPago, referencia, bancoCuenta, fecha, montoNeto }],
+  montoCobrado: Number,
+  observaciones: String,
+  recibidoPor: String
 }
 ```
 
@@ -608,10 +640,14 @@ const requireAdmin = (req, res, next) => {
 - ✅ **Facturación a clientes** (con descuento de stock automático)
 - ✅ **Facturación de proveedores** (con incremento de stock)
 - ✅ **Órdenes de pago** con tracking de estado y múltiples facturas
+- ✅ **Recibos de cobro** con selección de facturas pendientes
+- ✅ **Cobro múltiple** a clientes (facturas - notas de crédito + notas de débito)
+- ✅ **Pago múltiple** a proveedores con generación automática de orden de pago
 - ✅ **Notas de crédito** (devoluciones y ajustes negativos)
 - ✅ **Notas de débito** (cargos adicionales)
 - ✅ **Presupuestos** con fechas de validez
 - ✅ **Gestión automática de stock** con historial completo
+- ✅ **Dashboard financiero** con estadísticas en tiempo real
 
 ```javascript
 // Ejemplo: Descuento automático de stock al facturar
@@ -702,18 +738,18 @@ const errorHandler = (err, req, res, next) => {
 
 **Nuevas tecnologías:** bcryptjs, express-session, connect-mongo, Vercel
 
-**Estadísticas de la Versión 2.0:**
-- 📁 **12 controladores** (lógica de negocio)
-- 🗄️ **10 modelos** de Mongoose
-- 🛤️ **13 archivos de rutas**
-- 📄 **25+ vistas** en Pug
+**Estadísticas de la Versión 2.1:**
+- 📁 **13 controladores** (lógica de negocio)
+- 🗄️ **11 modelos** de Mongoose
+- 🛤️ **14 archivos de rutas**
+- 📄 **30+ vistas** en Pug
 - 🎨 **1 archivo CSS** de 1000+ líneas (completamente responsive)
 - 🔧 **2 servicios** reutilizables
 - ⚙️ **2 middlewares** personalizados
 
 **Comparación de versiones:**
 
-| Característica | v1.0 (JSON) | v1.5 (MongoDB) | v2.0 (Final) |
+| Característica | v1.0 (JSON) | v1.5 (MongoDB) | v2.1 (Final) |
 |----------------|-------------|----------------|--------------|
 | Base de datos | ❌ JSON | ✅ MongoDB | ✅ MongoDB Atlas |
 | Autenticación | ❌ No | ⚠️ Básica | ✅ Segura (bcrypt) |
@@ -722,6 +758,8 @@ const errorHandler = (err, req, res, next) => {
 | Gestión de stock | ❌ Manual | ⚠️ Manual | ✅ Automática |
 | Notas contables | ❌ No | ❌ No | ✅ Crédito y débito |
 | Órdenes de pago | ❌ No | ❌ No | ✅ Completas |
+| Recibos de cobro | ❌ No | ❌ No | ✅ Completos |
+| Cobro/Pago múltiple | ❌ No | ❌ No | ✅ Con cálculo neto (fact - NC + ND) |
 | Presupuestos | ❌ No | ❌ No | ✅ Con validez |
 | Manejo de errores | ⚠️ Básico | ⚠️ Básico | ✅ Centralizado |
 | Responsive | ⚠️ Parcial | ⚠️ Parcial | ✅ Completo |
@@ -992,27 +1030,22 @@ Durante el desarrollo de este proyecto se utilizaron herramientas de Inteligenci
 
 ### **Limitaciones Actuales:**
 
-1. **Módulo de Finanzas (Resumen Consolidado)**
-   - ⚠️ Estado: Funcional básico
-   - Muestra saldos de clientes y proveedores
-   - Pendiente: Integrar órdenes de pago, notas y presupuestos en un dashboard unificado
-
-2. **Paginación**
+1. **Paginación**
    - ⚠️ Los listados muestran todos los registros
    - Con grandes volúmenes de datos puede afectar performance
    - Solución futura: Implementar paginación con límite de 20-50 registros por página
 
-3. **Búsqueda y Filtros**
-   - ⚠️ No hay buscador implementado
-   - Los usuarios deben scrollear para encontrar registros
-   - Solución futura: Agregar filtros por nombre, fecha, estado, etc.
+2. **Búsqueda y Filtros**
+   - ⚠️ Filtros básicos implementados en cuentas por cobrar/pagar
+   - Falta buscador general por texto libre
+   - Solución futura: Agregar búsqueda global con autocompletado
 
-4. **Generación de PDFs**
-   - ⚠️ Las facturas solo se ven en pantalla
-   - No se pueden imprimir en formato profesional
+3. **Generación de PDFs**
+   - ⚠️ Las facturas, órdenes de pago y recibos se pueden imprimir desde el navegador
+   - No se generan PDFs descargables directamente
    - Solución futura: Librería como pdfkit o puppeteer
 
-5. **Tests Automatizados**
+4. **Tests Automatizados**
    - ⚠️ No implementados
    - Se realizaron pruebas manuales exhaustivas
    - Solución futura: Jest + Supertest
@@ -1020,10 +1053,10 @@ Durante el desarrollo de este proyecto se utilizaron herramientas de Inteligenci
 ### **Mejoras Futuras (Roadmap):**
 
 **Corto Plazo (1-2 meses):**
-- [ ] Completar dashboard financiero consolidado
 - [ ] Implementar paginación en todos los listados
-- [ ] Agregar búsqueda por texto en productos, clientes y proveedores
-- [ ] Exportación de facturas a PDF
+- [ ] Agregar búsqueda global por texto en productos, clientes y proveedores
+- [ ] Exportación de facturas y comprobantes a PDF
+- [ ] Notificaciones de vencimiento de facturas
 
 **Mediano Plazo (3-6 meses):**
 - [ ] Tests automatizados con Jest/Supertest
@@ -1132,93 +1165,6 @@ Durante el desarrollo de este proyecto se utilizaron herramientas de Inteligenci
 └── 📄 Documentacion_Final.pdf # Documento completo con todos los requisitos
 ```
 
-### **Contenido del PDF de Documentación:**
-
-El archivo `Documentacion_Final.pdf` debe incluir:
-
-1. **Carátula:**
-   - Nombre del proyecto: TodoStock S.A.
-   - Materia: Desarrollo de Sistemas Web - Back End
-   - Institución: IFTS 29
-   - Integrantes del equipo con roles
-   - Fecha de entrega
-
-2. **Índice**
-
-3. **Introducción y Objetivos**
-
-4. **Análisis de Requerimientos:**
-   - Requerimientos funcionales
-   - Requerimientos no funcionales (performance, seguridad, usabilidad)
-   - Casos de uso
-
-5. **Diagramas:**
-   - Diagrama de Casos de Uso
-   - Diagrama de Clases
-   - Diagrama de Secuencia
-   - Modelo de Datos (ER)
-
-6. **Diseño de la Arquitectura:**
-   - Patrón MVC
-   - Estructura de carpetas
-   - Tecnologías utilizadas
-
-7. **Planificación y Gestión:**
-   - División de tareas
-   - Cronograma (tablero Kanban, Trello, etc.)
-   - Estimación de tiempos
-
-8. **Implementación:**
-   - Explicación de módulos principales
-   - Decisiones técnicas justificadas
-   - Fragmentos de código relevante
-
-9. **Pruebas Realizadas:**
-   - Casos de prueba
-   - Resultados obtenidos
-   - Capturas de pantalla
-
-10. **Seguridad:**
-    - Autenticación y autorización
-    - Encriptación de contraseñas
-    - Protección de rutas
-
-11. **Despliegue:**
-    - Configuración de Vercel
-    - MongoDB Atlas
-    - Variables de entorno
-
-12. **Mejoras y Evolución:**
-    - Comparación entre versiones 1.0, 1.5 y 2.0
-    - Errores corregidos
-    - Funcionalidades agregadas
-    - Mejoras de rendimiento y seguridad
-
-13. **Conclusiones del Equipo** (ver sección anterior)
-
-14. **Bibliografía y Referencias**
-
-15. **Anexos:**
-    - Enlaces al repositorio GitHub
-    - Enlace al video demostrativo
-    - Enlace al sistema desplegado
-
-### **⚠️ Checklist Final de Entrega:**
-
-- [ ] Código de las 3 versiones (1.0, 1.5, 2.0) en carpetas separadas
-- [ ] README.md completo en cada versión
-- [ ] Documento PDF con toda la documentación requerida
-- [ ] Video grupal subido (Google Meet/Zoom/YouTube) con todos los integrantes
-- [ ] Enlace del video incluido en el PDF
-- [ ] Repositorio GitHub público o con acceso para el docente
-- [ ] Sistema desplegado y funcionando en Vercel
-- [ ] Enlaces verificados (video, GitHub, deploy) antes de entregar
-- [ ] Archivo comprimido (ZIP o RAR) con todo el contenido
-- [ ] Cada integrante sube su copia al campus virtual
-- [ ] Verificar que NO se incluya el video directamente (solo el enlace)
-
----
-
 ## 📞 Contacto y Soporte
 
 **Institución:** Instituto de Formación Técnica Superior N° 29 (IFTS 29)  
@@ -1227,8 +1173,8 @@ El archivo `Documentacion_Final.pdf` debe incluir:
 **Período:** 2026 - 1er Cuatrimestre  
 **Grupo:** 404Solution
 
-**Repositorio GitHub:** [Insertar enlace aquí]  
-**Sistema Desplegado:** [Insertar enlace de Vercel aquí]
+**Repositorio GitHub:** [https://github.com/IFTS29/404_Solutions_Entrega_Final.git](https://github.com/IFTS29/404_Solutions_Entrega_Final.git)  
+**Sistema Desplegado:** [https://404-solutions-entrega-final.vercel.app](https://404-solutions-entrega-final.vercel.app/login)
 
 ---
 
@@ -1239,5 +1185,5 @@ ISC © 2026 TodoStock S.A. - IFTS 29
 ---
 
 **Última actualización:** Junio 2026  
-**Versión:** 2.0.0  
+**Versión:** 2.1.0  
 **Estado:** ✅ Listo para entrega final
